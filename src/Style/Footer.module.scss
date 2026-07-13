@@ -1,0 +1,429 @@
+@import './variables';
+
+/* ================================================================
+   Footer — Fully Responsive (5 col → 3 col → 2 col → 1 col)
+   ================================================================ */
+
+.Footer {
+  background: radial-gradient(circle at 80% 0%, rgba(20, 30, 48, 1) 0%, rgba(15, 23, 42, 1) 100%);
+  color: $text-white;
+  padding: $spacing-3xl 0 0;
+  overflow: hidden;
+  position: relative;
+
+  /* Dot matrix pattern */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  /* Animated airplane track */
+  .airplaneTrack {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+
+    .airplane,
+    .airplane2,
+    .airplane3,
+    .airplane4 {
+      position: absolute;
+      top: -14px;
+      left: -50px;
+      color: var(--primary-color, $primary);
+      filter: drop-shadow(0 4px 6px rgba(211, 84, 0, 0.4));
+      animation: flyAcross linear infinite;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 100%;
+        margin-right: 4px;
+        height: 2px;
+        background: linear-gradient(to left, rgba(211, 84, 0, 0.4), transparent);
+        border-radius: 4px;
+      }
+    }
+
+    .airplane {
+      font-size: 24px;
+      animation-duration: 20s;
+      z-index: 3;
+
+      &::after {
+        width: 150px;
+      }
+    }
+
+    .airplane2 {
+      font-size: 16px;
+      opacity: 0.6;
+      top: -30px;
+      animation-duration: 25s;
+      animation-delay: 5s;
+      z-index: 2;
+
+      &::after {
+        width: 80px;
+      }
+    }
+
+    .airplane3 {
+      font-size: 12px;
+      opacity: 0.3;
+      top: 10px;
+      animation-duration: 30s;
+      animation-delay: 10s;
+      z-index: 1;
+
+      &::after {
+        width: 40px;
+      }
+    }
+
+    .airplane4 {
+      font-size: 20px;
+      opacity: 0.8;
+      top: -10px;
+      animation-duration: 18s;
+      animation-delay: 2s;
+      z-index: 4;
+      filter: drop-shadow(0 6px 8px rgba(211, 84, 0, 0.5));
+
+      &::after {
+        width: 120px;
+      }
+    }
+  }
+
+  @keyframes flyAcross {
+    0% {
+      transform: translateX(0) rotate(0);
+      left: -100px;
+    }
+
+    10% {
+      transform: translateX(10vw) translateY(-5px);
+    }
+
+    30% {
+      transform: translateX(30vw) translateY(5px);
+    }
+
+    50% {
+      transform: translateX(50vw) translateY(-2px);
+    }
+
+    70% {
+      transform: translateX(70vw) translateY(5px);
+    }
+
+    100% {
+      transform: translateX(120vw) rotate(0);
+      left: 0;
+    }
+  }
+
+  .wrapper {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 40px;
+
+    @media (max-width: 1024px) {
+      padding: 0 24px;
+    }
+
+    @media (max-width: 768px) {
+      padding: 0 16px;
+    }
+  }
+
+  /* ── Main grid ── */
+  .FooterFlex {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+    gap: 40px;
+    padding-bottom: 60px;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      padding-bottom: 40px;
+    }
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding-bottom: 32px;
+    }
+  }
+
+  /* ── Brand Column ── */
+  .FooterWrap {
+    grid-column: span 1;
+
+    @media (max-width: 1200px) {
+      grid-column: span 3;
+      /* Full width on tablet */
+    }
+
+    @media (max-width: 768px) {
+      grid-column: span 2;
+    }
+
+    @media (max-width: 480px) {
+      grid-column: span 1;
+    }
+
+    .FooterImage {
+      margin-bottom: 20px;
+      position: relative;
+      display: inline-block;
+
+      img {
+        height: 55px;
+        max-width: 100%;
+        position: relative;
+        z-index: 2;
+        object-fit: contain;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 120%;
+        height: 120%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+        z-index: 1;
+        pointer-events: none;
+      }
+    }
+
+    p {
+      color: $text-light;
+      margin-bottom: 24px;
+      font-size: 14px;
+      max-width: 300px;
+      line-height: 1.7;
+
+      @media (max-width: 768px) {
+        max-width: 100%;
+        margin-bottom: 20px;
+      }
+    }
+
+    .FooterInsta {
+      h2 {
+        font-size: 16px;
+        margin-bottom: 14px;
+        font-weight: 700;
+        color: $text-white;
+      }
+
+      ul {
+        display: flex;
+        gap: 12px;
+        padding: 0;
+        flex-wrap: wrap;
+
+        li a {
+          width: 42px;
+          height: 42px;
+          background: rgba(255, 255, 255, 0.06);
+          color: $text-white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: $radius-full;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
+          font-size: 18px;
+
+          &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-color, $primary);
+            transform: scale(0);
+            border-radius: 50%;
+            transition: transform 0.4s ease;
+            z-index: -1;
+          }
+
+          &:hover {
+            color: #fff;
+            transform: translateY(-4px) rotate(6deg);
+            border-color: transparent;
+            box-shadow: 0 8px 18px rgba(211, 84, 0, 0.3);
+
+            &::before {
+              transform: scale(1);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /* ── Link Columns ── */
+  .FooterWrap1,
+  .FooterWrap2,
+  .FooterWrap3 {
+    h2 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: $text-white;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 28px;
+        height: 2px;
+        background: $primary;
+      }
+    }
+
+    ul {
+      padding: 0;
+
+      li {
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: $text-light;
+        transition: $transition-base;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+
+        a {
+          color: $text-light;
+          position: relative;
+          transition: $transition-base;
+          line-height: 1.5;
+
+          &:hover {
+            color: #fff;
+            padding-left: 12px;
+          }
+
+          &::before {
+            content: "→";
+            position: absolute;
+            left: -15px;
+            opacity: 0;
+            color: var(--primary-color, $primary);
+            transition: all 0.3s ease;
+            font-size: 12px;
+          }
+
+          &:hover::before {
+            left: 0;
+            opacity: 1;
+          }
+        }
+
+
+        svg {
+          color: $primary;
+          margin-top: 2px;
+          flex-shrink: 0;
+        }
+
+        span {
+          line-height: 1.5;
+        }
+      }
+    }
+  }
+
+  .featuredLink {
+    color: var(--primary-color, $primary) !important;
+    font-weight: 700 !important;
+    background: rgba(211, 84, 0, 0.1);
+    padding: 4px 10px !important;
+    border-radius: 6px;
+    display: inline-block;
+    margin-left: 0;
+    border: 1px dashed rgba(211, 84, 0, 0.4);
+    animation: pulseHighlight 2s infinite ease-in-out;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 13px;
+
+    &::before {
+      display: none !important; // Hide the arrow for the featured link
+    }
+
+    &:hover {
+      background: var(--primary-color, $primary) !important;
+      color: #fff !important;
+      padding-left: 14px !important;
+      transform: translateY(-2px) scale(1.05);
+      border-style: solid;
+      box-shadow: 0 4px 12px rgba(211, 84, 0, 0.3);
+    }
+  }
+
+  @keyframes pulseHighlight {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211, 84, 0, 0.2); }
+    50% { transform: scale(1.03); box-shadow: 0 0 15px 0 rgba(211, 84, 0, 0.1); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211, 84, 0, 0); }
+  }
+
+  /* ── Footer Bottom Bar ── */
+  .FooterBottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 24px 0;
+    text-align: center;
+    position: relative;
+    z-index: 5;
+
+    p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+
+      @media (max-width: 768px) {
+        font-size: 12px;
+      }
+    }
+  }
+}

@@ -1,0 +1,308 @@
+"use client";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import axios from "axios";
+import Style from "../Style/Sidebar.module.scss";
+
+const Sidebar = ({ menuOpen, setMenuOpen }) => {
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openSubCategory, setOpenSubCategory] = useState(null);
+  const [indiaTours, setIndiaTours] = useState([]);
+  const [asiaTours, setAsiaTours] = useState([]);
+  const [countriesData, setCountriesData] = useState([]);
+  const [exclusivePages, setExclusivePages] = useState([]);
+  const [hasLoadedMenuData, setHasLoadedMenuData] = useState(false);
+
+
+  const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://trippyjiffy.com";
+
+  useEffect(() => {
+    if (!menuOpen || hasLoadedMenuData) return;
+
+    let cancelled = false;
+    const fetchData = async () => {
+      try {
+        const [indiaRes, asiaRes, countryRes, exclusivesRes] = await Promise.all([
+          axios.get(`${baseURL}/api/category-india/get`),
+          axios.get(`${baseURL}/api/asia/get`),
+          axios.get(`${baseURL}/api/country/get`),
+          axios.get(`${baseURL}/api/landing-pages/all`).catch(() => ({ data: [] }))
+        ]);
+        if (cancelled) return;
+        setIndiaTours(Array.isArray(indiaRes.data) ? indiaRes.data : []);
+        setAsiaTours(Array.isArray(asiaRes.data) ? asiaRes.data : []);
+        setCountriesData(Array.isArray(countryRes.data) ? countryRes.data : []);
+
+        const pages = (exclusivesRes.data?.success ? exclusivesRes.data.data : (Array.isArray(exclusivesRes.data) ? exclusivesRes.data : []));
+        const formatted = pages.map(p => ({
+            name: p.title,
+            path: `/family-trips/${p.slug}`
+        }));
+        setExclusivePages(formatted);
+        setHasLoadedMenuData(true);
+
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchData();
+    return () => {
+      cancelled = true;
+    };
+  }, [baseURL, hasLoadedMenuData, menuOpen]);
+
+
+  // Close on escape key
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    if (menuOpen) {
+      window.addEventListener("keydown", handleEsc);
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen, setMenuOpen]);
+
+  const toggleDropdown = (index) => {
+    setOpenDropdown(openDropdown === index ? null : index);
+    setOpenSubCategory(null);
+  };
+
+  const slugify = (text) =>
+    typeof text === "string"
+      ? text
+          .toLowerCase()
+          .trim()
+          .replace(/[^\w\s-]/g, "")
+          .replace(/\s+/g, "-")
+      : "";
+
+  const navData = [
+    { name: "Home", path: "/" },
+    {
+      name: "Explore",
+      categories: [
+        { name: "All Destinations", path: "/family-tours" },
+        { name: "Upcoming Trips", path: "/upcoming-best-tours" },
+      ],
+    },
+    {
+      name: "India Tours",
+      categories: indiaTours.map((region) => ({
+        ...region,
+        path: `/india-tours/${region.id}/${slugify(region.region_name)}`,
+      })),
+    },
+    {
+      name: "Overseas Tours",
+      categories: asiaTours.map((region) => ({
+        ...region,
+        path: `/asia-tours/${slugify(region.country_name)}`,
+      })),
+    },
+    {
+      name: "Exclusives",
+      categories: exclusivePages,
+    },
+
+    {
+      name: "Reach Us",
+      categories: [
+        { name: "Business With Us", path: "/business-with-us" },
+        { name: "Contact us", path: "/contact-us" },
+      ],
+    },
+    { name: "About Us", path: "/about-us" },
+    { name: "Blogs", path: "/blogpage" },
+    { name: "User Login", path: "/register" },
+  ];
+
+  const handleClose = () => setMenuOpen(false);
+
+  return (
+    <>
+      {/* Backdrop overlay */}
+      <div
+        className={`${Style.overlay} ${menuOpen ? Style.show : ""}`}
+        onClick={handleClose}
+        aria-hidden="true"
+      />
+
+      {/* Sidebar drawer */}
+      <nav
+        className={`${Style.sidebar} ${menuOpen ? Style.active : ""}`}
+        aria-label="Mobile navigation"
+        aria-modal="true"
+        role="dialog"
+      >
+        {/* Close button */}
+        <button className={Style.closeBtn} onClick={handleClose} aria-label="Close menu">
+          ✕
+        </button>
+
+        <ul className={Style.NavList}>
+          {navData.map((menu, index) => (
+            <li key={index} className={Style.NavItem}>
+              <div
+                className={Style.MenuLink}
+                onClick={() => menu.categories && toggleDropdown(index)}
+              >
+                {menu.categories ? (
+                  <span>{menu.name}</span>
+                ) : (
+                  <Link href={menu.path} onClick={handleClose}>
+                    {menu.name}
+                  </Link>
+                )}
+                {menu.categories && (
+                  <span
+                    className={`${Style.DropArrow} ${
+                      openDropdown === index ? Style.open : ""
+                    }`}
+                    aria-hidden="true"
+                  >
+                    ▼
+                  </span>
+                )}
+              </div>
+
+              {menu.categories && (
+                <ul
+                  className={`${Style.Dropdown}
+                    ${openDropdown === index ? Style.showDropdown : ""}
+                    ${menu.name === "India Tours" ? Style.indiaDropdown : ""}
+                    ${menu.name === "Overseas Tours" ? Style.asiaDropdown : ""}
+                    ${menu.name === "Explore" ? Style.exploreDropdown : ""}
+                    ${menu.name === "Reach Us" ? Style.reachDropdown : ""}`}
+                >
+                  {menu.categories.map((cat, i) => {
+                    const subCategoryKey =
+                      menu.name === "India Tours" ? cat.id : cat._id;
+
+                    return (
+                      <li key={i} className={Style.DropItem}>
+                        {menu.name === "India Tours" && (
+                          <Link
+                            href={`/india-tours/${cat.id}/${slugify(
+                              cat.region_name
+                            )}`}
+                            className={Style.IndiaLink}
+                            onClick={handleClose}
+                          >
+                            {cat.region_name}
+                          </Link>
+                        )}
+                        {menu.name === "Overseas Tours" && (
+                          <>
+                            <h2
+                              className={Style.AsiaHeading}
+                              onClick={() =>
+                                setOpenSubCategory(
+                                  openSubCategory === subCategoryKey
+                                    ? null
+                                    : subCategoryKey
+                                )
+                              }
+                            >
+                              <Link
+                                href={`/asia-tours/${slugify(cat.country_name)}`}
+                                className={Style.AsiaLink}
+                                onClick={handleClose}
+                              >
+                                {cat.country_name}
+                              </Link>
+                            </h2>
+
+                            {openSubCategory === cat._id &&
+                              countriesData
+                                .filter(
+                                  (c) =>
+                                    String(c.category_id) === String(cat._id)
+                                )
+                                .map((country) => (
+                                  <ul
+                                    key={country._id}
+                                    className={Style.StateList}
+                                  >
+                                    <li>
+                                      <Link
+                                        href={`/asia-tours/${
+                                          cat.asiaId
+                                        }/${slugify(
+                                          cat.country_name
+                                        )}/${slugify(country.country_name)}`}
+                                        className={Style.AsiaCountryLink}
+                                        onClick={handleClose}
+                                      >
+                                        {country.country_name}
+                                      </Link>
+                                    </li>
+                                  </ul>
+                                ))}
+                          </>
+                        )}
+
+                        {(menu.name === "Reach Us" ||
+                          menu.name === "Explore" ||
+                          menu.name === "Exclusives") && (
+                          <Link
+                            href={cat.path}
+                            className={Style.ReachUsLink}
+                            onClick={() => {
+                              toggleDropdown(null);
+                              handleClose();
+                            }}
+                          >
+                            {cat.name}
+                          </Link>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+
+        {/* CTA buttons at bottom */}
+        <div className={Style.HeaderRight}>
+          <Link
+            href="/enquiry-form"
+            className={Style.PlanTripBtn}
+            onClick={handleClose}
+          >
+            ✈ Plan Your Trip
+          </Link>
+          <Link
+            href="/payment"
+            className={Style.PlanTripBtn}
+            onClick={handleClose}
+            style={{ background: "linear-gradient(135deg, #1d4ed8, #1e40af)" }}
+          >
+            💳 Pay Now
+          </Link>
+          <a
+            href="https://www.bohosaaz.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={Style.PlanTripBtn}
+            onClick={handleClose}
+            style={{ background: "linear-gradient(135deg, #047857, #065f46)" }}
+          >
+            🛍 Shop With Us
+          </a>
+        </div>
+      </nav>
+    </>
+  );
+};
+
+export default Sidebar;

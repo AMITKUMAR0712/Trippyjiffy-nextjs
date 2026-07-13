@@ -1,0 +1,107 @@
+"use client";
+import React from "react";
+import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
+
+import {
+  LayoutDashboard,
+  User,
+  Settings,
+  Bell,
+  FileText,
+  LogOut,
+  ChevronLeft,
+  ChevronRight,
+  ShieldCheck,
+  Home,
+  Heart
+} from "lucide-react";
+import Style from "../Dashboard/Style/Sidebar.module.scss";
+
+const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleLinkClick = () => {
+    if (isMobile && isOpen) toggleSidebar();
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.dispatchEvent(new CustomEvent("userLoggedIn", { detail: "Guest" }));
+    if (isMobile && isOpen) toggleSidebar();
+    router.push("/login");
+  };
+
+  const menuItems = [
+    { name: "Back to Home", path: "/", icon: <Home size={20} /> },
+    { name: "Dashboard", path: "/user", icon: <LayoutDashboard size={20} />, end: true },
+    { name: "Profile", path: "/user/profile", icon: <User size={20} /> },
+    { name: "Settings", path: "/user/edit", icon: <Settings size={20} /> },
+    { name: "Messages", path: "/user/announcement", icon: <Bell size={20} /> },
+    { name: "My Documents", path: "/user/UserDocument", icon: <FileText size={20} /> },
+    { name: "Wishlist", path: "/user/wishlist", icon: <Heart size={20} /> },
+  ];
+
+  return (
+    <aside className={`${Style.sidebar} ${!isOpen ? Style.closed : ""}`}>
+      <div className={Style.sidebarHeader}>
+        <div className={Style.logoSection}>
+          <div className={Style.logoIcon}>
+            <ShieldCheck size={24} color="#f97316" />
+          </div>
+          {isOpen && (
+            <span
+              className={Style.logoText}
+            >
+              User Panel
+            </span>
+          )}
+        </div>
+        {!isMobile && (
+          <button className={Style.toggleBtn} onClick={toggleSidebar}>
+            {isOpen ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
+          </button>
+        )}
+      </div>
+
+      <nav className={Style.nav}>
+        {menuItems.map((item, idx) => {
+          const isActive = item.end
+            ? pathname === item.path
+            : pathname === item.path || pathname.startsWith(item.path + "/");
+          return (
+            <Link
+              key={idx}
+              href={item.path}
+              onClick={handleLinkClick}
+              className={`${Style.navLink} ${isActive ? Style.active : ""}`}
+              title={!isOpen ? item.name : ""}
+            >
+              <span className={Style.icon}>{item.icon}</span>
+              {isOpen && (
+                <span
+                  className={Style.linkText}
+                >
+                  {item.name}
+                </span>
+              )}
+              {isActive && <div layoutId="activeNav" className={Style.activeIndicator} />}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className={Style.sidebarFooter}>
+        <button className={Style.logoutBtn} onClick={handleLogout}>
+          <LogOut size={20} />
+          {isOpen && <span className={Style.logoutText}>Logout</span>}
+        </button>
+      </div>
+    </aside>
+  );
+};
+
+export default Sidebar;
+

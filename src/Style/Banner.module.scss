@@ -1,0 +1,391 @@
+@import './variables';
+
+.Banner {
+  width: 100%;
+  height: 80vh;
+  min-height: 600px;
+  position: relative;
+  overflow: hidden;
+  background: #1a1a1a; // Dark base color for stability
+  contain: layout; // Optimization to prevent layout leakage
+
+
+  .swiperContainer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+
+  .slide {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+  }
+
+  .bannerImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.05);
+    transition: transform 10s ease-out;
+  }
+
+  :global(.swiper-slide-active) .bannerImage {
+    transform: scale(1.15);
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
+    z-index: 2;
+  }
+
+  .contentWrapper {
+    position: relative;
+    width: 100%;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    padding: 0 20px;
+  }
+
+  .Bannertext {
+    max-width: 900px;
+    text-align: center;
+    color: $text-white;
+
+    .badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba($primary, 0.2);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba($primary, 0.3);
+      border-radius: $radius-full;
+      font-size: 14px;
+      font-weight: 600;
+      color: $primary;
+      margin-bottom: $spacing-lg;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    h1 {
+      font-size: clamp(36px, 8vw, 72px);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: $spacing-md;
+
+      span {
+        display: block;
+        color: $primary;
+        font-style: italic;
+      }
+    }
+
+    p {
+      font-size: clamp(16px, 2vw, 20px);
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 600px;
+      margin: 0 auto $spacing-2xl;
+    }
+
+    .searchContainer {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .searchBox {
+      position: relative;
+      background: $glass-bg;
+      backdrop-filter: blur(20px);
+      padding: 10px;
+      border-radius: $radius-full;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: $shadow-xl;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: $transition-base;
+
+      &:focus-within {
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 0 0 4px rgba($primary, 0.2);
+      }
+
+      .iconWrapper {
+        padding-left: 20px;
+        color: $primary;
+        display: flex;
+        align-items: center;
+      }
+
+      input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        padding: 12px 0;
+        font-size: 16px;
+        color: $text-dark;
+        font-weight: 500;
+
+        &::placeholder {
+          color: $text-muted;
+          font-weight: 400;
+        }
+      }
+
+      .searchBtn {
+        background: $primary;
+        color: $text-white;
+        padding: 12px 28px;
+        border-radius: $radius-full;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        transition: $transition-base;
+
+        &:hover {
+          background: $primary-dark;
+          transform: scale(1.02);
+        }
+
+        span {
+          display: inline-block;
+        }
+      }
+    }
+
+    .searchResults {
+      position: absolute;
+      top: 110%;
+      left: 0;
+      right: 0;
+      background: $bg-white;
+      border-radius: $radius-xl;
+      overflow: hidden;
+      box-shadow: $shadow-premium;
+      z-index: 100;
+      max-height: 300px;
+      overflow-y: auto;
+
+      .searchItem {
+        padding: 14px 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: $text-main;
+        cursor: pointer;
+        transition: $transition-base;
+        text-align: left;
+
+        svg {
+          color: $text-muted;
+          transition: $transition-base;
+        }
+
+        &:hover {
+          background: $primary-light;
+          color: $primary;
+
+          svg {
+            color: $primary;
+          }
+
+          .itemArrow {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        span {
+          flex: 1;
+        }
+
+        .itemArrow {
+          opacity: 0;
+          transform: translateX(-10px);
+          transition: $transition-base;
+        }
+      }
+    }
+
+    .features {
+      margin-top: $spacing-3xl;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+
+      .featureItem {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        strong {
+          font-size: 28px;
+          font-weight: 800;
+          color: $primary;
+        }
+
+        span {
+          font-size: 14px;
+          color: rgba(255, 255, 255, 0.8);
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+      }
+
+      .separator {
+        width: 1px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .Banner {
+    height: 80vh; // Removed 'auto' to fix CLS
+    min-height: 600px; 
+
+    .slide {
+      height: 100%; 
+      min-height: 100%;
+    }
+
+    .contentWrapper {
+      padding: 80px 16px 40px; 
+      min-height: 80vh;
+      align-items: center;
+      display: flex;
+    }
+
+    .Bannertext {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: auto;
+      margin-top: 40px;
+      width: 100%;
+
+      h1 {
+        font-size: clamp(30px, 9vw, 42px);
+        margin-bottom: 16px;
+      }
+
+      p {
+        font-size: 15px;
+        line-height: 1.6;
+        margin-bottom: 24px;
+        padding: 0 10px;
+        text-align: center;
+        width: 100%;
+      }
+
+      .searchContainer {
+        width: 100%;
+        padding: 0 10px;
+      }
+
+      .searchBox {
+        border-radius: 50px;
+        gap: 5px;
+        padding: 6px 6px 6px 15px;
+        width: 100%;
+        display: flex;
+
+        .iconWrapper {
+          padding-left: 0;
+        }
+
+        input {
+          font-size: 14px;
+          min-width: 0;
+          flex: 1;
+          text-overflow: ellipsis;
+        }
+        
+        .searchBtn {
+          padding: 10px 16px;
+          min-height: 40px;
+          border-radius: 50px;
+
+          span {
+            display: none;
+          }
+        }
+      }
+
+      .features {
+        flex-direction: row;
+        gap: 10px;
+        margin-top: 25px;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0 5px;
+
+        .separator {
+          display: block;
+          height: 30px;
+          opacity: 0.5;
+        }
+
+        .featureItem {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          strong {
+            font-size: 18px;
+            white-space: nowrap;
+          }
+
+          span {
+            font-size: 10px;
+            text-align: center;
+            line-height: 1.2;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .Banner {
+    height: 75vh;
+    min-height: 500px;
+
+    .slide {
+      height: 100%;
+      min-height: 100%;
+    }
+    
+    .contentWrapper {
+      min-height: 75vh;
+      padding: 60px 16px 30px;
+    }
+
+    .Bannertext .badge {
+      font-size: 12px;
+      padding: 5px 12px;
+    }
+  }
+}

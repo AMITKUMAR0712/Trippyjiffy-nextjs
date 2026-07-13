@@ -1,0 +1,386 @@
+@import "./variables";
+
+.destinationsContainer {
+  padding: $spacing-3xl 0;
+  background-color: $bg-light;
+  overflow: hidden;
+
+  &.dark {
+    background: $bg-dark;
+
+    .card {
+      background: #1e293b;
+      border-color: rgba(255, 255, 255, 0.05);
+
+      .title {
+        color: $text-white;
+      }
+    }
+
+    .DestinationCardBlock h2 {
+      color: $text-white;
+    }
+  }
+
+  .wrapper {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .DestinationCardBlock {
+    margin-bottom: $spacing-xl;
+    text-align: left;
+
+    h2 {
+      font-size: 36px;
+      font-weight: 800;
+      color: $text-dark;
+      position: relative;
+      display: inline-block;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: $primary;
+        border-radius: $radius-full;
+      }
+
+      span {
+        color: $primary;
+      }
+    }
+  }
+
+  :global(.swiper) {
+    padding: 20px 0 40px;
+    overflow: visible;
+  }
+
+  :global(.swiper-button-next),
+  :global(.swiper-button-prev) {
+    background: $bg-white;
+    width: 48px;
+    height: 48px;
+    border-radius: $radius-full;
+    box-shadow: $shadow-lg;
+    color: $primary;
+    transition: $transition-base;
+    top: 50%;
+    transform: translateY(-50%);
+
+    &::after {
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    &:hover {
+      background: $primary;
+      color: $text-white;
+      transform: translateY(-50%) scale(1.1);
+    }
+  }
+
+  :global(.swiper-button-prev) {
+    left: -24px;
+  }
+
+  :global(.swiper-button-next) {
+    right: -24px;
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    padding: 1.5rem;
+    width: 100%;
+    text-align: center;
+    color: whitesmoke;
+    background-color: #1e293b;
+    border-radius: 20px;
+    height: 350px;
+    /* Reduced for a more compact professional look */
+    box-shadow:
+      0 1px 1px rgba(0, 0, 0, 0.1),
+      0 2px 2px rgba(0, 0, 0, 0.1),
+      0 4px 4px rgba(0, 0, 0, 0.1),
+      0 8px 8px rgba(0, 0, 0, 0.1),
+      0 16px 16px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    --d: 700ms;
+    --e: cubic-bezier(0.19, 1, 0.22, 1);
+
+    .cardBgImg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 110%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform calc(var(--d) * 1.5) var(--e);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 200%;
+      pointer-events: none;
+      background-image: linear-gradient(to bottom,
+          hsla(0, 0%, 0%, 0) 0%,
+          hsla(0, 0%, 0%, 0.009) 11.7%,
+          hsla(0, 0%, 0%, 0.034) 22.1%,
+          hsla(0, 0%, 0%, 0.072) 31.2%,
+          hsla(0, 0%, 0%, 0.123) 39.4%,
+          hsla(0, 0%, 0%, 0.182) 46.6%,
+          hsla(0, 0%, 0%, 0.249) 53.1%,
+          hsla(0, 0%, 0%, 0.32) 58.9%,
+          hsla(0, 0%, 0%, 0.394) 64.3%,
+          hsla(0, 0%, 0%, 0.468) 69.3%,
+          hsla(0, 0%, 0%, 0.54) 74.1%,
+          hsla(0, 0%, 0%, 0.607) 78.8%,
+          hsla(0, 0%, 0%, 0.668) 83.6%,
+          hsla(0, 0%, 0%, 0.721) 88.7%,
+          hsla(0, 0%, 0%, 0.762) 94.1%,
+          hsla(0, 0%, 0%, 0.79) 100%);
+      transform: translateY(-50%);
+      transition: transform calc(var(--d) * 2) var(--e);
+      z-index: 1;
+    }
+
+    .cardActions {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 3;
+
+      .iconBtn {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: #f97316;
+          border-color: #f97316;
+          transform: scale(1.1);
+        }
+      }
+    }
+
+    .content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding: 1rem;
+      transition: transform var(--d) var(--e);
+      z-index: 2;
+
+      >*+* {
+        margin-top: 1rem;
+      }
+    }
+
+    .title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .copy {
+      font-size: 1rem;
+      font-style: italic;
+      line-height: 1.4;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .btn {
+      cursor: pointer;
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05rem;
+      text-transform: uppercase;
+      color: white;
+      background-color: var(--primary);
+      border: none;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #fff;
+        color: var(--primary);
+      }
+    }
+
+    @media (hover: hover) {
+      &:after {
+        transform: translateY(0);
+      }
+
+      .content {
+        transform: translateY(calc(100% - 5.5rem));
+
+        >*:not(.title) {
+          opacity: 0;
+          transform: translateY(1rem);
+          transition:
+            transform var(--d) var(--e),
+            opacity var(--d) var(--e);
+        }
+      }
+
+      &:hover,
+      &:focus-within {
+        align-items: center;
+
+        .cardBgImg {
+          transform: translateY(-4%);
+        }
+
+        &:after {
+          transform: translateY(-50%);
+        }
+
+        .content {
+          transform: translateY(0);
+
+          >*:not(.title) {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: calc(var(--d) / 8);
+          }
+        }
+      }
+    }
+
+    /* Responsive fixes for heights */
+    @media (max-width: 768px) {
+      height: 320px;
+      /* More manageable height on smaller screens */
+
+      .title {
+        font-size: 1.3rem;
+      }
+
+      .content {
+        /* Show content on mobile by default since hover: hover might not trigger */
+        transform: translateY(0);
+
+        >*:not(.title) {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      &:after {
+        transform: translateY(-50%);
+      }
+    }
+  }
+
+  .skeletonCard {
+    height: 380px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: $radius-xl;
+  }
+
+  .viewAllBtn {
+    background: #f97316;
+    color: white;
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+    border: 2px solid transparent;
+
+    &:hover {
+      background: white;
+      color: #f97316;
+      border-color: #f97316;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4);
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (max-width: 1200px) {
+  .destinationsContainer {
+    .wrapper {
+      padding: 0 40px;
+    }
+
+    :global(.swiper-button-prev) {
+      left: 0;
+    }
+
+    :global(.swiper-button-next) {
+      right: 0;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .destinationsContainer {
+    padding: 60px 0;
+
+    .wrapper {
+      padding: 0 20px;
+    }
+
+    .DestinationCardBlock h2 {
+      font-size: 28px;
+    }
+
+    /* .card is already responsive within its own block */
+
+    :global(.swiper-button-next),
+    :global(.swiper-button-prev) {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,404 @@
+"use client";
+import React, { useState, useEffect, useRef } from "react";
+import Style from "../Style/Payment.module.scss";
+import { ShieldCheck, Lock, CreditCard, MapPin, Star, Globe, ChevronLeft, ChevronRight } from "lucide-react";
+import { toast } from "sonner";
+
+import PayImg1 from "../Img/Payment-20260507T162434Z-3-001/Payment/1.webp";
+import PayImg2 from "../Img/Payment-20260507T162434Z-3-001/Payment/2.webp";
+import PayImg3 from "../Img/Payment-20260507T162434Z-3-001/Payment/3.webp";
+
+// Travel images for the right-side slider
+const SLIDES = [
+  {
+    img: PayImg1.src,
+    label: "Exclusive Getaways",
+  },
+  {
+    img: PayImg2.src,
+    label: "Seamless Travel",
+  },
+  {
+    img: PayImg3.src,
+    label: "Luxury Stays",
+  },
+];
+
+const loadRazorpay = () => {
+  if (window.Razorpay) return Promise.resolve(true);
+
+  return new Promise((resolve) => {
+    const existingScript = document.getElementById("razorpay-checkout-js");
+    if (existingScript) {
+      existingScript.addEventListener("load", () => resolve(true), { once: true });
+      existingScript.addEventListener("error", () => resolve(false), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.id = "razorpay-checkout-js";
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
+
+/* ── Right-side Image Slider ── */
+const ImageSlider = () => {
+  const [active, setActive] = useState(0);
+  const [dir, setDir] = useState(1); // 1 = forward, -1 = backward
+  const timerRef = useRef(null);
+
+  const go = (newIdx, direction) => {
+    setDir(direction);
+    setActive((newIdx + SLIDES.length) % SLIDES.length);
+  };
+
+  const next = () => go(active + 1, 1);
+  const prev = () => go(active - 1, -1);
+
+  // Auto-advance every 4 seconds
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      setDir(1);
+      setActive((i) => (i + 1) % SLIDES.length);
+    }, 4000);
+    return () => clearInterval(timerRef.current);
+  }, []);
+
+  const resetTimer = () => {
+    clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      setDir(1);
+      setActive((i) => (i + 1) % SLIDES.length);
+    }, 4000);
+  };
+
+  const handleNext = () => { next(); resetTimer(); };
+  const handlePrev = () => { prev(); resetTimer(); };
+
+  const variants = {
+    enter: (d) => ({ x: d > 0 ? "100%" : "-100%", opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (d) => ({ x: d > 0 ? "-100%" : "100%", opacity: 0 }),
+  };
+
+  return (
+    <div className={Style.SliderPanel}>
+      {/* Slides */}
+      <div style={{ display: "contents" }}>
+        <div
+          key={active}
+          className={Style.Slide}
+          custom={dir}
+        >
+          <img
+            src={SLIDES[active].img}
+            alt={SLIDES[active].label}
+            className={Style.SlideImg}
+          />
+          <div className={Style.SlideOverlay} />
+
+          {/* Top branding */}
+          <div className={Style.TopBrand}>
+            <span className={Style.BrandLogo}>✈ TrippyJiffy</span>
+            <p className={Style.BrandTagline}>Your journey to extraordinary begins here</p>
+            <div className={Style.BrandLine} />
+          </div>
+
+          {/* Location label */}
+          <div className={Style.LocationLabel}>
+            <MapPin size={14} />
+            <span>{SLIDES[active].label}</span>
+          </div>
+
+          {/* Quote */}
+          <div className={Style.QuoteBox}>
+            <p className={Style.QuoteMark}>"</p>
+            <p className={Style.QuoteText}>
+              Travel is the only thing you buy that makes you richer
+            </p>
+            <p className={Style.QuoteAuthor}>— Anonymous Explorer</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Arrow controls */}
+      <button className={`${Style.Arrow} ${Style.ArrowLeft}`} onClick={handlePrev} aria-label="Previous">
+        <ChevronLeft size={20} />
+      </button>
+      <button className={`${Style.Arrow} ${Style.ArrowRight}`} onClick={handleNext} aria-label="Next">
+        <ChevronRight size={20} />
+      </button>
+
+      {/* Dot indicators */}
+      <div className={Style.Dots}>
+        {SLIDES.map((_, i) => (
+          <button
+            key={i}
+            className={`${Style.Dot} ${i === active ? Style.DotActive : ""}`}
+            onClick={() => { go(i, i > active ? 1 : -1); resetTimer(); }}
+            aria-label={`Slide ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+/* ── Main Payment Component ── */
+const Payment = ({ isModal = false }) => {
+  const [amount, setAmount] = useState("");
+  const [currency, setCurrency] = useState("INR");
+  const [transactionId, setTransactionId] = useState("");
+  const [screenshot, setScreenshot] = useState(null);
+  const [showDetailsForm, setShowDetailsForm] = useState(false);
+  const [userDetails, setUserDetails] = useState({ name: "", email: "", phone: "" });
+
+  const handlePayment = async () => {
+    if (!amount || isNaN(amount) || amount <= 0)
+      return toast.error("Please enter a valid amount");
+
+    try {
+      const isRazorpayLoaded = await loadRazorpay();
+      if (!isRazorpayLoaded) {
+        return toast.error("Payment gateway failed to load. Please try again.");
+      }
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/payment/create-order`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount: parseFloat(amount), currency }),
+        }
+      );
+
+      const order = await res.json();
+      if (!order.id) return toast.error("Order creation failed. Please try again.");
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
+        amount: order.amount,
+        currency: order.currency,
+        name: "TrippyJiffy.com",
+        description: "Secure Booking Payment",
+        order_id: order.id,
+        handler: function (response) {
+          setTransactionId(response.razorpay_payment_id);
+          setShowDetailsForm(true);
+          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/payment/payment-success`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              order_id: order.id,
+              payment_id: response.razorpay_payment_id,
+              status: "paid",
+            }),
+          });
+        },
+        theme: { color: "#d9630c" },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error("Payment error:", error);
+      toast.error("Something went wrong during payment.");
+    }
+  };
+
+  const handleDetailsSubmit = async (e) => {
+    e.preventDefault();
+    if (!transactionId || !userDetails.name || !userDetails.email || !userDetails.phone)
+      return toast.error("Please fill all required fields");
+
+    const formData = new FormData();
+    formData.append("name", userDetails.name);
+    formData.append("email", userDetails.email);
+    formData.append("phone", userDetails.phone);
+    formData.append("transactionId", transactionId);
+    formData.append("currency", currency);
+    if (screenshot) formData.append("screenshot", screenshot);
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/payment/payment-details`,
+        { method: "POST", body: formData }
+      );
+      const data = await res.json();
+      if (data.success) {
+        toast.success("Details submitted successfully! ✅");
+        setShowDetailsForm(false);
+        setAmount("");
+        setTransactionId("");
+        setScreenshot(null);
+        setUserDetails({ name: "", email: "", phone: "" });
+        setCurrency("INR");
+      } else toast.error(data.message || "Submission failed");
+    } catch (error) {
+      console.error(error);
+      toast.error("Error submitting details. Please try again.");
+    }
+  };
+
+  const formContent = (
+    <div
+      className={Style.FormPanel}
+      style={isModal ? { padding: 0, background: 'transparent' } : {}}
+    >
+      <div
+        className={Style.FormInner}
+        style={isModal ? { boxShadow: 'none', border: 'none', maxWidth: '100%', padding: '20px 0 0 0' } : {}}
+      >
+        {/* Header */}
+        <div className={Style.FormHeader}>
+          <div className={Style.IconRing}>
+            <ShieldCheck size={28} />
+          </div>
+          <div>
+            <h1 className={Style.FormTitle}>Secure Booking</h1>
+            <p className={Style.FormSubtitle}>Complete your reservation safely</p>
+          </div>
+        </div>
+
+        <div className={Style.Divider} />
+
+        {/* Step indicator */}
+        <div className={Style.StepBar}>
+          <div className={`${Style.Step} ${Style.StepActive}`}>
+            <span>1</span> Amount
+          </div>
+          <div className={Style.StepLine} />
+          <div className={`${Style.Step} ${showDetailsForm ? Style.StepActive : ""}`}>
+            <span>2</span> Verify
+          </div>
+        </div>
+
+        <div style={{ display: "contents" }}>
+          {!showDetailsForm ? (
+            <div
+              key="payment-form"
+              className={Style.FormBody}
+            >
+              <div className={Style.InputGroup}>
+                <label>Currency</label>
+                <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
+                  <option value="INR">🇮🇳 Pay in ₹ INR</option>
+                  <option value="USD">🇺🇸 Pay in $ USD</option>
+                </select>
+              </div>
+
+              <div className={Style.InputGroup}>
+                <label>Amount</label>
+                <div className={Style.AmountWrapper}>
+                  <span className={Style.CurrencySymbol}>
+                    {currency === "INR" ? "₹" : "$"}
+                  </span>
+                  <input
+                    type="number"
+                    placeholder="0.00"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <button onClick={handlePayment} className={Style.PayBtn}>
+                <Lock size={16} /> Pay Now Securely
+              </button>
+            </div>
+          ) : (
+            <form
+              key="details-form"
+              className={Style.FormBody}
+              onSubmit={handleDetailsSubmit}
+            >
+              <div className={Style.TxnBadge}>
+                <span>Transaction ID:</span>
+                <code>{transactionId}</code>
+              </div>
+
+              <div className={Style.InputGroup}>
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  placeholder="John Doe"
+                  value={userDetails.name}
+                  onChange={(e) => setUserDetails({ ...userDetails, name: e.target.value })}
+                />
+              </div>
+
+              <div className={Style.InputGroup}>
+                <label>Email Address</label>
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={userDetails.email}
+                  onChange={(e) => setUserDetails({ ...userDetails, email: e.target.value })}
+                />
+              </div>
+
+              <div className={Style.InputGroup}>
+                <label>Phone Number</label>
+                <input
+                  type="tel"
+                  placeholder="+91 98765 43210"
+                  value={userDetails.phone}
+                  onChange={(e) => setUserDetails({ ...userDetails, phone: e.target.value })}
+                />
+              </div>
+
+              <div className={Style.InputGroup}>
+                <label>Upload Screenshot</label>
+                <label className={Style.FileZone}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setScreenshot(e.target.files[0])}
+                  />
+                  {screenshot ? (
+                    <span className={Style.FileChosen}>✅ {screenshot.name}</span>
+                  ) : (
+                    <span>Click to upload transaction screenshot</span>
+                  )}
+                </label>
+              </div>
+
+              <button type="submit" className={Style.PayBtn}>
+                <ShieldCheck size={16} /> Submit Verification
+              </button>
+            </form>
+          )}
+        </div>
+
+        {/* Trust Badges */}
+        <div className={Style.TrustRow}>
+          <div className={Style.TrustBadge}><Lock size={14} /><span>256-bit SSL</span></div>
+          <div className={Style.TrustBadge}><CreditCard size={14} /><span>Safe &amp; Secure</span></div>
+          <div className={Style.TrustBadge}><ShieldCheck size={14} /><span>Razorpay</span></div>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (isModal) {
+    return formContent;
+  }
+
+  return (
+    <div className={Style.PaymentPage}>
+      {/* ── LEFT: Image Slider ── */}
+      <div>
+        <ImageSlider />
+      </div>
+
+      {/* ── RIGHT: Payment Form ── */}
+      {formContent}
+    </div>
+  );
+};
+
+export default Payment;

@@ -1,0 +1,158 @@
+"use client";
+import React, { useEffect, useState, memo, useCallback } from "react";
+import Style from "../Style/Blog.module.scss";
+import Link from "next/link";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/autoplay";
+import axios from "axios";
+
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://trippyjiffy.com";
+
+// ======================
+// BlogCard Component
+// ======================
+const BlogCard = memo(({ item, getFirstParagraph }) => {
+  const fullImageURL =
+    item?.image && typeof item.image === "string"
+      ? item.image.startsWith("http")
+        ? item.image
+        : `${baseURL}/api/uploads/${item.image.replace(/^\/?uploads\//, "")}`
+      : "https://placehold.co/600x400?text=No+Image";
+
+  return (
+    <div className={Style.BlogWrap}>
+      <Link href={`/blog/${item.id}`} className={Style.imageWrap}>
+        <picture>
+          <source srcSet={fullImageURL} type="image/webp" />
+          <img
+            src={fullImageURL}
+            alt={item?.title || "Blog image"}
+            className={Style.BlogImage}
+            loading="lazy"
+            decoding="async"
+            width="600"
+            height="400"
+          />
+        </picture>
+      </Link>
+
+      <div className={Style.content}>
+        <Link href={`/blog/${item.id}`} className={Style.noLink}>
+          <h3>{item?.title || "Untitled Blog"}</h3>
+        </Link>
+
+        <p className={Style.meta}>
+          <b>TrippyJiffy Travel</b> •{" "}
+          {item?.date ? new Date(item.date).toLocaleDateString() : "Unknown"}
+        </p>
+
+        <p>{getFirstParagraph(item?.paragraphs)}</p>
+
+        <div className={Style.BlogBtn}>
+          <Link href={`/blog/${item.id}`} className={Style.readMore}>
+            Read More →
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+// ======================
+// Main Blog Component
+// ======================
+const Blog = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await axios.get(`${baseURL}/api/blogs/get`);
+        const blogData = Array.isArray(res.data)
+          ? res.data
+          : res.data?.data || [];
+        setBlogs(blogData);
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+        setBlogs([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBlogs();
+  }, []);
+
+  const getFirstParagraph = useCallback((paragraphs) => {
+    try {
+      let parsed = paragraphs;
+      if (typeof paragraphs === "string") parsed = JSON.parse(paragraphs);
+
+      if (!parsed?.blocks?.length) return "";
+      const firstBlock = parsed.blocks.find(
+        (block) => block.type === "paragraph"
+      );
+      const text = firstBlock
+        ? firstBlock.data.text
+        : parsed.blocks[0]?.data?.text || "";
+
+      const words = text.split(" ").slice(0, 15).join(" ");
+      return words + (text.split(" ").length > 15 ? "..." : "");
+    } catch (err) {
+      console.warn("Paragraph parsing failed:", err);
+      return "";
+    }
+  }, []);
+
+  return (
+    <div className={Style.Blog}>
+      <div className={Style.wrapper}>
+        <h2 className={Style.sectionTitle}>
+          Latest Travel <span>Blogs</span>
+        </h2>
+
+        {loading ? (
+          <div className={Style.BlogSkeletons}>
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className={Style.skeletonCard}></div>
+            ))}
+          </div>
+        ) : blogs.length > 0 ? (
+          <Swiper
+            modules={[Navigation, Autoplay]}
+            navigation={true}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
+            spaceBetween={30}
+            slidesPerView={3}
+            slidesPerGroup={1}
+            loop={blogs.length >= 3}
+            speed={1000}
+            grabCursor={true}
+            breakpoints={{
+              0: { slidesPerView: 1, spaceBetween: 15, autoplay: { delay: 2500 } },
+              640: { slidesPerView: 2, spaceBetween: 20 },
+              1024: { slidesPerView: 3, spaceBetween: 30 },
+            }}
+            className={Style.BlogSwiper}
+          >
+            {blogs.map((item) => (
+              <SwiperSlide key={item.id}>
+                <BlogCard item={item} getFirstParagraph={getFirstParagraph} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <p className={Style.noData}>⚠️ No blogs found</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Blog;

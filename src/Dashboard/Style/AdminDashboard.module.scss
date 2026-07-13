@@ -1,0 +1,129 @@
+.UserDashboard {
+  padding: 20px;
+
+  h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #333;
+  }
+
+  .TopCards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+
+    .Card {
+      padding: 24px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      text-align: left;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+
+      &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 35px rgba(0, 0, 0, 0.12);
+      }
+
+      h3 {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      p {
+        font-size: 36px;
+        font-weight: 800;
+        margin: 0;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: -20px;
+        right: -20px;
+        width: 100px;
+        height: 100px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+      }
+
+      &.BlueCard {
+        background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+      }
+      &.GreenCard {
+        background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+      }
+      &.PurpleCard {
+        background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+      }
+      &.OrangeCard {
+        background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+      }
+    }
+  }
+
+  .ChartsRow {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+
+    .ChartWrapper {
+      background: #fff;
+      padding: 28px;
+      border-radius: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+
+      h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      canvas {
+        width: 100% !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .ChartsRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .UserDashboard {
+    padding: 20px;
+    
+    h2 {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .TopCards {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .ChartsRow .ChartWrapper {
+      padding: 20px;
+      
+      h3 {
+        font-size: 16px;
+      }
+    }
+  }
+}

@@ -1,0 +1,363 @@
+/* ================================================================
+   Sidebar — Mobile Full-Screen Menu
+   ================================================================ */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 320px;
+  height: 100vh;
+  height: 100dvh;
+  background: #fff;
+  box-shadow: -4px 0 30px rgba(0, 0, 0, 0.15);
+  transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    width: 85%;
+    max-width: 300px;
+  }
+
+  &.active {
+    right: 0;
+  }
+}
+
+/* Header section of sidebar */
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  flex-shrink: 0;
+}
+
+.closeBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  transition: all 0.2s ease;
+  float: right;
+  margin: 16px 16px 0 0;
+
+  &:hover {
+    background: #fee2e2;
+    color: #ef4444;
+    border-color: #fecaca;
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+
+  &.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* Scrollable nav list */
+.NavList {
+  list-style: none;
+  padding: 8px 0;
+  margin: 50px 0 0 0;
+  overflow-y: auto;
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
+
+  /* Scrollbar */
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 4px;
+  }
+}
+
+.NavItem {
+  border-bottom: 1px solid #f8fafc;
+
+  .MenuLink {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 14px 20px;
+    transition: background 0.2s ease;
+    min-height: 52px;
+    /* Touch-friendly */
+
+    &:hover {
+      background: #f8fafc;
+    }
+
+    span {
+      color: #1e293b;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    a {
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e293b;
+      transition: color 0.2s;
+      flex: 1;
+
+      &:hover {
+        color: #f97316;
+      }
+    }
+
+    .DropArrow {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: #f1f5f9;
+      font-size: 11px;
+      color: #64748b;
+      transition: transform 0.25s ease, background 0.2s ease;
+      flex-shrink: 0;
+
+      &.open {
+        transform: rotate(180deg);
+        background: rgba(249, 115, 22, 0.1);
+        color: #f97316;
+      }
+    }
+  }
+
+  .Dropdown {
+    list-style: none;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+    background: #fafafa;
+
+    li {
+      border-bottom: 1px solid #f0f0f0;
+      width: 100%;
+    }
+
+    &.showDropdown {
+      max-height: 600px;
+    }
+  }
+}
+
+.indiaDropdown.showDropdown {
+  max-height: 300px;
+}
+
+.asiaDropdown.showDropdown {
+  max-height: 600px;
+}
+
+.reachDropdown.showDropdown {
+  max-height: 200px;
+}
+
+.exploreDropdown.showDropdown {
+  max-height: 150px;
+}
+
+/* Sidebar action buttons */
+.HeaderRight {
+  padding: 20px;
+  border-top: 1px solid #f1f5f9;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  background: #fff;
+  margin-top: auto;
+
+  .PlanTripBtn {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, var(--primary-color, #f97316), #ea580c);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 46px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 10px rgba(249, 115, 22, 0.2);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(249, 115, 22, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &:nth-child(2) {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+
+      &:hover {
+        box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
+      }
+    }
+
+    &:nth-child(3) {
+      background: linear-gradient(135deg, #10b981, #059669);
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+
+      &:hover {
+        box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+      }
+    }
+  }
+}
+
+/* Link styles within dropdown items */
+.IndiaLink {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
+  padding: 12px 28px;
+  min-height: 48px;
+  transition: color 0.2s, background 0.2s;
+  text-decoration: none;
+  width: 100%;
+
+  &::before {
+    content: '→';
+    margin-right: 8px;
+    color: #f97316;
+    font-size: 12px;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: all 0.2s ease;
+  }
+
+  &:hover {
+    color: #f97316;
+    background: rgba(249, 115, 22, 0.05);
+    padding-left: 36px;
+
+    &::before {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+.AsiaHeading {
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+.AsiaLink {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  padding: 12px 28px;
+  min-height: 48px;
+  transition: color 0.2s, background 0.2s;
+  text-decoration: none;
+  width: 100%;
+
+  &:hover {
+    color: #f97316;
+    background: rgba(249, 115, 22, 0.05);
+  }
+}
+
+.AsiaCountryLink {
+  display: block;
+  font-size: 13px;
+  color: #64748b;
+  margin-left: 0;
+  padding: 10px 40px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #f97316;
+  }
+}
+
+.StateList {
+  padding: 0;
+  list-style: none;
+}
+
+.ReachUsLink {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6d28d9;
+  padding: 12px 28px;
+  min-height: 48px;
+  transition: color 0.2s, background 0.2s;
+  text-decoration: none;
+  width: 100%;
+
+  &:hover {
+    color: #7c3aed;
+    background: rgba(109, 40, 217, 0.05);
+  }
+}
+
+.activeLink {
+  color: #f97316 !important;
+  font-weight: 700;
+  border-left: 3px solid #f97316;
+  padding-left: 25px !important;
+  background: rgba(249, 115, 22, 0.06);
+  border-radius: 0 8px 8px 0;
+  transition: all 0.3s ease;
+}
