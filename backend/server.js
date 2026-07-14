@@ -20,17 +20,22 @@ app.use(express.urlencoded({ extended: true }));
 // ✅ Database config
 import "./config/db.js";
 
-// ✅ Static file serving
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
+// ✅ Static file serving (always from backend/uploads next to this file)
+import fs from "fs";
+const uploadsDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+app.use("/uploads", express.static(uploadsDir));
+app.use("/api/uploads", express.static(uploadsDir));
 
-// ✅ Generic Upload Route
+// ✅ Generic Upload Route — must write to the same folder Express serves
 import multer from "multer";
 import { v4 as uuidv4 } from "uuid";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/");
+    cb(null, uploadsDir);
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
