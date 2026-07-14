@@ -83,7 +83,7 @@ const Banner = () => {
     <div className={Style.Banner}>
       <Swiper
         modules={[Navigation, Autoplay, EffectFade]}
-        loop={true}
+        loop={[Banner1, Banner2.src, Banner3.src, Banner4.src].length >= 2}
         effect="fade"
         autoplay={{ delay: 5000, disableOnInteraction: false }}
         speed={2000}

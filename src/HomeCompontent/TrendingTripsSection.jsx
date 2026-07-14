@@ -141,12 +141,12 @@ const TrendingTripsSection = ({ title = "Trending Trips", limit = 8, featuredTri
           navigation
           autoplay={{ delay: 2500, disableOnInteraction: false }}
           speed={800}
-          loop={slides.length > 4}
+          loop={slides.length >= 8}
           breakpoints={{
-            320: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-            1400: { slidesPerView: 4 },
+            320: { slidesPerView: 1, loop: slides.length >= 2 },
+            768: { slidesPerView: 2, loop: slides.length >= 4 },
+            1024: { slidesPerView: 3, loop: slides.length >= 6 },
+            1400: { slidesPerView: 4, loop: slides.length >= 8 },
           }}
         >
           {slides.map((item) => {

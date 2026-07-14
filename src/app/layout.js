@@ -158,6 +158,16 @@ export default function RootLayout({ children }) {
             window.gtag && window.gtag("config", "AW-17771713499");
           `}
         </Script>
+        <Script id="travelpayouts" strategy="lazyOnload">
+          {`
+            (function () {
+              var script = document.createElement("script");
+              script.async = 1;
+              script.src = 'https://emrldtp.com/NTQ4NjQ1.js?t=548645';
+              document.head.appendChild(script);
+            })();
+          `}
+        </Script>
       </body>
     </html>
   );

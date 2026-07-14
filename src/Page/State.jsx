@@ -336,14 +336,6 @@ const State = () => {
 
   const formattedTitle = `${bannerTitle} Tours | TrippyJiffy`;
 
-  // ✅ logs (optional)
-  useEffect(() => {
-    console.log("baseURL:", baseURL);
-    console.log("bannerData.image:", bannerData?.image);
-    console.log("bannerImgRaw:", bannerImgRaw);
-    console.log("bannerImageURL:", bannerImageURL);
-  }, [baseURL, bannerData, bannerImgRaw, bannerImageURL]);
-
   return (
     <>
       <SEO

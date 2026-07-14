@@ -222,7 +222,7 @@ const UpcomingDetails = () => {
                   slidesPerView={1.2}
                   autoplay={{ delay: 3000 }}
                   grabCursor={true}
-                  loop={true}
+                  loop={images.length >= 3}
                 >
                   {images.map((img, idx) => (
                     <SwiperSlide key={idx}>

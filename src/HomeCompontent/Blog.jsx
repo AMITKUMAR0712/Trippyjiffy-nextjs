@@ -131,13 +131,13 @@ const Blog = () => {
             spaceBetween={30}
             slidesPerView={3}
             slidesPerGroup={1}
-            loop={blogs.length >= 3}
+            loop={blogs.length >= 6}
             speed={1000}
             grabCursor={true}
             breakpoints={{
-              0: { slidesPerView: 1, spaceBetween: 15, autoplay: { delay: 2500 } },
-              640: { slidesPerView: 2, spaceBetween: 20 },
-              1024: { slidesPerView: 3, spaceBetween: 30 },
+              0: { slidesPerView: 1, spaceBetween: 15, autoplay: { delay: 2500 }, loop: blogs.length >= 2 },
+              640: { slidesPerView: 2, spaceBetween: 20, loop: blogs.length >= 4 },
+              1024: { slidesPerView: 3, spaceBetween: 30, loop: blogs.length >= 6 },
             }}
             className={Style.BlogSwiper}
           >

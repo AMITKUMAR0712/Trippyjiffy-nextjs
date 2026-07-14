@@ -263,7 +263,7 @@ const LandingTourPage = () => {
                 modules={[Autoplay, EffectFade]}
                 effect="fade"
                 autoplay={{ delay: 3500, disableOnInteraction: false }}
-                loop
+                loop={(page.hero?.slides || []).length >= 2}
                 key={JSON.stringify(page.hero?.slides || [])}
               >
                 {(page.hero?.slides || []).map((img, index) => (
