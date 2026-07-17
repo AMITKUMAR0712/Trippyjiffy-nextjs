@@ -3,7 +3,7 @@
 .NavList {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 2px;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -20,14 +20,16 @@
   .MenuLink {
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-size: 14px;
-    font-weight: 600;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
     color: $text-main;
     cursor: pointer;
     transition: $transition-base;
-    padding: 7px 11px;
+    padding: 6px 9px;
     border-radius: $radius-md;
+    white-space: nowrap;
 
     span, a {
       color: inherit;
@@ -40,10 +42,26 @@
     }
 
     .DropArrow {
-      font-size: 8px;
+      font-size: 7px;
       transition: transform 0.3s ease;
       &.open { transform: rotate(180deg); }
     }
+  }
+}
+
+@media (max-width: 1200px) {
+  .NavItem .MenuLink {
+    font-size: 12.5px;
+    padding: 6px 7px;
+    gap: 3px;
+  }
+}
+
+@media (max-width: 1050px) {
+  .NavList { gap: 0; }
+  .NavItem .MenuLink {
+    font-size: 12px;
+    padding: 6px 6px;
   }
 }
 

@@ -19,6 +19,7 @@ import { Link as ScrollLink } from "react-scroll";
 import Brief from "../Img/Untitled.png";
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
+import PartnerStrip from "../HomeCompontent/PartnerStrip";
 // ----------------- SEO -----------------
 import SEO from "../HomeCompontent/SEO";
 
@@ -545,6 +546,8 @@ const TourDetails = () => {
             </div>
           </div>
         </div>
+
+        <PartnerStrip city={tourState?.state_name} />
       </div>
     </div>
   );

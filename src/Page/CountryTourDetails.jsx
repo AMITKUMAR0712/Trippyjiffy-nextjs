@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import axios from "axios";
 import Style from "../Style/TourDetails.module.scss";
 import InsiderDealsForm from "./InsiderDealsForm";
@@ -20,6 +21,7 @@ import Loader from "../HomeCompontent/Loader.jsx";
 import { Helmet } from "react-helmet-async";
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
+import PartnerStrip from "../HomeCompontent/PartnerStrip";
 
 const CountryTourDetails = () => {
   const { asiastateId } = useParams();
@@ -496,6 +498,8 @@ const CountryTourDetails = () => {
             </div>
           </div>
         </div>
+
+        <PartnerStrip city={tour?.state_name} />
       </div>
     </div>
   );

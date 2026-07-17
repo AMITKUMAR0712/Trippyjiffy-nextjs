@@ -120,6 +120,7 @@ const Sidebar = ({ menuOpen, setMenuOpen }) => {
       ],
     },
     { name: "About Us", path: "/about-us" },
+    { name: "Experiences", path: "/experiences" },
     { name: "Blogs", path: "/blogpage" },
     { name: "User Login", path: "/register" },
   ];
