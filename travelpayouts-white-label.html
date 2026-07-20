@@ -36,7 +36,6 @@
       .tpwl-widgets__wrapper h3 {text-align: center;font-size: 36px;margin: 0px;margin-bottom: 32px;}
       .tpwl-widget-weedles {display: grid;grid-template-columns: 1fr 1fr 1fr;gap: 20px;}
       .tpwl-widget-weedle {display: flex;justify-content: center;}
-      .tpwl-hotel-widget {margin-top: 56px;}
       .tpwl-footer__wrapper {display: flex;align-items: center;justify-content: center;padding: 56px 100px;text-align: center;font-size: 16px;font-weight: 600;background-color: var(--tpwl-search-result-background);}
       .tpwl-footer__copyright {margin-bottom: 12px;}
       .tpwl-footer__links {display: flex;justify-content: center;gap: 20px;}
@@ -114,10 +113,10 @@
             <div class="tpwl-widget-weedle" data-destination="LON" is="weedle"></div>
           </div>
 
-          <div class="tpwl-hotel-widget">
-            <h3>Hotel search</h3>
-            <div id="tpwl-hotel-search"></div>
-          </div>
+          <h3>Hotel search</h3>
+          <script async
+            src="https://tp.media/content?currency=usd&trs=548645&shmarker=749161&show_hotels=true&powered_by=true&locale=en&primary_override=%23FF8E01&color_button=%23FF8E01&color_icons=%23FF8E01&secondary=%23FFFFFF&dark=%23262626&light=%23FFFFFF&special=%23C4C4C4&color_focused=%23FF8E01&border_radius=5&plain=false&promo_id=7873&campaign_id=101"
+            charset="utf-8"></script>
         </div>
       </div>
     </main>
@@ -146,50 +145,19 @@
   </body>
 
   <script>
-    // Popular destinations widgets
+    // script is required to render popular destinations widgets
     (function () {
       const container = document.getElementById('tpwl-widget-weedles');
-      if (!container || !window.TPWL_EXTRA) return;
       const weedleElements = container.querySelectorAll('div[is="weedle"]');
 
       weedleElements.forEach(element => {
+        if (!TPWL_EXTRA) return;
         const destination = element.getAttribute('data-destination');
         const scriptElement = document.createElement('script');
         scriptElement.async = 1;
         scriptElement.src = `https://[:widget_domain:]/content?currency=${String(TPWL_EXTRA.currency).toLowerCase()}&trs=${TPWL_EXTRA.trs}&shmarker=${TPWL_EXTRA.marker}&destination=${destination}&target_host=${TPWL_EXTRA.domain}&locale=${TPWL_EXTRA.locale}&limit=6&powered_by=false&primary=%23${TPWL_EXTRA.link_color}&promo_id=4044&campaign_id=100`;
         element.appendChild(scriptElement);
       });
-    })();
-
-    // Hotel search widget (uses your White Label trs/marker automatically)
-    (function () {
-      const container = document.getElementById('tpwl-hotel-search');
-      if (!container || !window.TPWL_EXTRA) return;
-
-      const color = TPWL_EXTRA.link_color || 'FF8E01';
-      const scriptElement = document.createElement('script');
-      scriptElement.async = 1;
-      scriptElement.charset = 'utf-8';
-      scriptElement.src =
-        `https://[:widget_domain:]/content?currency=${String(TPWL_EXTRA.currency).toLowerCase()}` +
-        `&trs=${TPWL_EXTRA.trs}` +
-        `&shmarker=${TPWL_EXTRA.marker}` +
-        `&show_hotels=true` +
-        `&powered_by=true` +
-        `&locale=${TPWL_EXTRA.locale}` +
-        `&primary_override=%23${color}` +
-        `&color_button=%23${color}` +
-        `&color_icons=%23${color}` +
-        `&secondary=%23FFFFFF` +
-        `&dark=%23262626` +
-        `&light=%23FFFFFF` +
-        `&special=%23C4C4C4` +
-        `&color_focused=%23${color}` +
-        `&border_radius=5` +
-        `&plain=false` +
-        `&promo_id=7873` +
-        `&campaign_id=101`;
-      container.appendChild(scriptElement);
     })();
   </script>
 </html>
