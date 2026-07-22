@@ -1,8 +1,18 @@
 import "./globals.css";
 import Script from "next/script";
+import { Inter } from "next/font/google";
 import { JsonLd } from "@/components/JsonLd";
 import { travelAgencyJsonLd, localBusinessJsonLd } from "@/lib/seo";
 import { SITE_NAME } from "@/lib/site";
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-inter",
+  preload: true,
+  adjustFontFallback: true,
+});
 
 export const metadata = {
   metadataBase: new URL("https://trippyjiffy.com"),
@@ -32,7 +42,7 @@ export const metadata = {
     google: "Vl74CMXxnE8ovZb1mtkCyPSopPEEIrr72_cOlJ39xn0",
   },
   icons: {
-    icon: "/trippylogo.png",
+    icon: "/trippylogo.webp",
   },
   alternates: {
     canonical: "https://trippyjiffy.com/",
@@ -67,17 +77,17 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.variable}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-          rel="stylesheet"
+          rel="preload"
+          as="image"
+          href="/banner/lcp.webp"
+          fetchPriority="high"
+          type="image/webp"
         />
-        <link rel="preload" as="image" href="/Banner_LCP.webp" fetchPriority="high" />
       </head>
-      <body>
+      <body className={inter.className}>
         <JsonLd data={[travelAgencyJsonLd, localBusinessJsonLd]} />
 
         <noscript>
@@ -111,46 +121,49 @@ export default function RootLayout({ children }) {
 
         {children}
 
-        <Script id="gtag-init" strategy="afterInteractive">
+        {/* Analytics only after real user interaction or 12s — protects LCP/TBT */}
+        <Script id="gtag-init" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
-            window.gtag("js", new Date());
           `}
         </Script>
-        <Script id="gtm-loader" strategy="lazyOnload">
+        <Script id="deferred-third-party" strategy="lazyOnload">
           {`
-            function loadThirdPartyScripts() {
-              if (window.__tjScriptsLoaded) return;
-              window.__tjScriptsLoaded = true;
-              (function (w, d, s, l, i) {
-                w[l] = w[l] || [];
-                w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-                var f = d.getElementsByTagName(s)[0],
-                  j = d.createElement(s),
-                  dl = l != "dataLayer" ? "&l=" + l : "";
-                j.async = true;
-                j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-                f.parentNode.insertBefore(j, f);
-              })(window, document, "script", "dataLayer", "GTM-MHR3DXPV");
-              var gtagScript = document.createElement("script");
-              gtagScript.async = true;
-              gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-DGEZY5NBY0";
-              document.head.appendChild(gtagScript);
-              gtagScript.onload = function () {
-                window.gtag && window.gtag("config", "G-DGEZY5NBY0");
-                window.gtag && window.gtag("config", "G-XSV86BKWEG");
-                window.gtag && window.gtag("config", "AW-17771713499");
-              };
-              var tpScript = document.createElement("script");
-              tpScript.async = true;
-              tpScript.src = "https://emrldtp.com/NTQ4NjQ1.js?t=548645";
-              document.head.appendChild(tpScript);
-            }
-            ["scroll", "click", "touchstart", "keydown"].forEach(function (evt) {
-              window.addEventListener(evt, loadThirdPartyScripts, { once: true, passive: true });
-            });
-            setTimeout(loadThirdPartyScripts, 8000);
+            (function () {
+              function loadThirdPartyScripts() {
+                if (window.__tjScriptsLoaded) return;
+                window.__tjScriptsLoaded = true;
+                window.gtag && window.gtag("js", new Date());
+                (function (w, d, s, l, i) {
+                  w[l] = w[l] || [];
+                  w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+                  var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != "dataLayer" ? "&l=" + l : "";
+                  j.async = true;
+                  j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+                  f.parentNode.insertBefore(j, f);
+                })(window, document, "script", "dataLayer", "GTM-MHR3DXPV");
+                var gtagScript = document.createElement("script");
+                gtagScript.async = true;
+                gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-DGEZY5NBY0";
+                document.head.appendChild(gtagScript);
+                gtagScript.onload = function () {
+                  window.gtag && window.gtag("config", "G-DGEZY5NBY0");
+                  window.gtag && window.gtag("config", "G-XSV86BKWEG");
+                  window.gtag && window.gtag("config", "AW-17771713499");
+                };
+                var tpScript = document.createElement("script");
+                tpScript.async = true;
+                tpScript.src = "https://emrldtp.com/NTQ4NjQ1.js?t=548645";
+                document.head.appendChild(tpScript);
+              }
+              ["scroll", "click", "touchstart", "keydown"].forEach(function (evt) {
+                window.addEventListener(evt, loadThirdPartyScripts, { once: true, passive: true });
+              });
+              setTimeout(loadThirdPartyScripts, 12000);
+            })();
           `}
         </Script>
       </body>

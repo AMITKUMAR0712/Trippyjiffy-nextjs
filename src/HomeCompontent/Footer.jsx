@@ -10,18 +10,32 @@ import {
   FaEnvelope,
   FaPhoneAlt,
   FaMapMarkerAlt,
-  FaPlane,
   FaGlobeAmericas
 } from "react-icons/fa";
 
 
 import Style from "../Style/Footer.module.scss";
-import Logo from "../Img/trippylogo.png";
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://trippyjiffy.com";
 
+const STATIC_INDIA = [
+  { id: 1, region_name: "Golden Triangle Tour" },
+  { id: 2, region_name: "South India Tour" },
+  { id: 3, region_name: "Rajasthan Tour" },
+  { id: 4, region_name: "Weekend Tour" },
+  { id: 5, region_name: "Wildlife Tours" },
+];
+
+const STATIC_ASIA = [
+  { country_name: "Dubai" },
+  { country_name: "Thailand" },
+  { country_name: "Nepal" },
+  { country_name: "Singapore" },
+  { country_name: "Egypt" },
+];
+
 const Footer = () => {
-  const [indiaTours, setIndiaTours] = useState([]);
-  const [asiaTours, setAsiaTours] = useState([]);
+  const [indiaTours, setIndiaTours] = useState(STATIC_INDIA);
+  const [asiaTours, setAsiaTours] = useState(STATIC_ASIA);
 
   useEffect(() => {
     let cancelled = false;
@@ -34,12 +48,12 @@ const Footer = () => {
         ]);
 
         if (cancelled) return;
-        setIndiaTours(Array.isArray(indiaRes.data) ? indiaRes.data : []);
-        setAsiaTours(Array.isArray(asiaRes.data) ? asiaRes.data : []);
+        const india = Array.isArray(indiaRes.data) ? indiaRes.data : [];
+        const asia = Array.isArray(asiaRes.data) ? asiaRes.data : [];
+        if (india.length) setIndiaTours(india.slice(0, 8));
+        if (asia.length) setAsiaTours(asia.slice(0, 8));
       } catch (err) {
         console.error("Error fetching footer tours:", err);
-        setIndiaTours([]);
-        setAsiaTours([]);
       }
     };
 
@@ -91,19 +105,18 @@ const Footer = () => {
 
   return (
     <footer className={Style.Footer}>
-      {/* Animated Airplane Crossing */}
-      <div className={Style.airplaneTrack}>
-        <div className={Style.airplane}><FaPlane /></div>
-        <div className={Style.airplane2}><FaPlane /></div>
-        <div className={Style.airplane3}><FaPlane /></div>
-        <div className={Style.airplane4}><FaPlane /></div>
-      </div>
-
       <div className={Style.wrapper}>
         <div className={Style.FooterFlex}>
           <div className={Style.FooterWrap}>
             <div className={Style.FooterImage}>
-              <img src={Logo.src} alt="Footer Logo" width="160" height="60" loading="lazy" />
+              <img
+                src="/trippylogo.webp"
+                alt="Footer Logo"
+                width="96"
+                height="96"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
             <p>Where unforgettable memories don&apos;t come with a price tag!</p>
 
@@ -146,8 +159,7 @@ const Footer = () => {
           <div className={Style.FooterWrap2}>
             <h2>India Tours</h2>
             <ul>
-              {indiaTours.length > 0 ? (
-                indiaTours.map((tour) => (
+              {indiaTours.map((tour) => (
                   <li key={tour.id}>
                     <Link
                       href={`/india-tours/${tour.id}/${slugify(tour.region_name)}`}
@@ -155,19 +167,15 @@ const Footer = () => {
                       {tour.region_name}
                     </Link>
                   </li>
-                ))
-              ) : (
-                <li>Loading...</li>
-              )}
+                ))}
             </ul>
           </div>
 
           <div className={Style.FooterWrap2}>
             <h2>Overseas Tours</h2>
             <ul>
-              {asiaTours.length > 0 ? (
-                asiaTours.map((tour) => (
-                  <li key={tour.id || tour._id}>
+              {asiaTours.map((tour) => (
+                  <li key={tour.id || tour._id || tour.country_name}>
                     <Link
                       href={`/asia-tours/${slugify(
                         tour.country_name || tour.region_name || tour.name
@@ -176,10 +184,7 @@ const Footer = () => {
                       {tour.country_name || tour.region_name || tour.name}
                     </Link>
                   </li>
-                ))
-              ) : (
-                <li>Loading...</li>
-              )}
+                ))}
             </ul>
           </div>
 

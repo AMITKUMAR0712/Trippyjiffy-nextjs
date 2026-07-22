@@ -5,7 +5,6 @@ import Link from "next/link";
 import { FaUserCircle } from "react-icons/fa";
 import Sidebar from "./Sidebar";
 import Style from "../Style/Header.module.scss";
-import logo from "../Img/trippylogo.png";
 import DropDown from "../HomeCompontent/DropDown.jsx";
 import axios from "axios";
 
@@ -198,11 +197,12 @@ const Header = () => {
                         <div className={Style.HeaderLeft}>
                             <Link href="/" aria-label="TrippyJiffy Home">
                                 <img
-                                    src={logo?.src || logo || "/trippylogo.png"}
+                                    src="/trippylogo.webp"
                                     alt="TrippyJiffy - Best Travel Agency, India Tours & Asia Travel"
                                     width={140}
                                     height={52}
                                     decoding="async"
+                                    fetchPriority="high"
                                 />
                             </Link>
                         </div>

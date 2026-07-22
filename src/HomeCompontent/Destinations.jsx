@@ -297,10 +297,10 @@ const DestinationCard = memo(({ item, slugify, type }) => {
       <OptimizedImage
         src={imageUrl}
         alt={item.title}
-        width={700}
-        height={525}
+        width={640}
+        height={480}
         className={Style.cardBgImg}
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+        sizes="(max-width: 768px) 90vw, (max-width: 1200px) 40vw, 25vw"
       />
       <div className={Style.cardActions}>
         <button onClick={(e) => handleAction(e, "wishlist")} className={Style.iconBtn} title="Add to Wishlist">

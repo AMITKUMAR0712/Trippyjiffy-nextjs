@@ -10,6 +10,10 @@
   padding: $spacing-3xl 0 0;
   overflow: hidden;
   position: relative;
+  min-height: 520px;
+  contain: layout style;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 520px;
 
   /* Dot matrix pattern */
   &::before {
@@ -25,7 +29,7 @@
     pointer-events: none;
   }
 
-  /* Animated airplane track */
+  /* Animated airplane track — transform-only, no filter (CLS safe) */
   .airplaneTrack {
     position: absolute;
     top: 60px;
@@ -34,8 +38,13 @@
     height: 1px;
     border-top: 1px dashed rgba(255, 255, 255, 0.1);
     pointer-events: none;
+    will-change: transform;
 
     @media (max-width: 768px) {
+      display: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
       display: none;
     }
 
@@ -47,8 +56,8 @@
       top: -14px;
       left: -50px;
       color: var(--primary-color, $primary);
-      filter: drop-shadow(0 4px 6px rgba(211, 84, 0, 0.4));
       animation: flyAcross linear infinite;
+      transform: translateZ(0);
 
       &::after {
         content: '';
@@ -379,7 +388,6 @@
     display: inline-block;
     margin-left: 0;
     border: 1px dashed rgba(211, 84, 0, 0.4);
-    animation: pulseHighlight 2s infinite ease-in-out;
     margin-top: 10px;
     margin-bottom: 5px;
     font-size: 13px;
@@ -392,16 +400,9 @@
       background: var(--primary-color, $primary) !important;
       color: #fff !important;
       padding-left: 14px !important;
-      transform: translateY(-2px) scale(1.05);
+      transform: translateY(-2px);
       border-style: solid;
-      box-shadow: 0 4px 12px rgba(211, 84, 0, 0.3);
     }
-  }
-
-  @keyframes pulseHighlight {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211, 84, 0, 0.2); }
-    50% { transform: scale(1.03); box-shadow: 0 0 15px 0 rgba(211, 84, 0, 0.1); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211, 84, 0, 0); }
   }
 
   /* ── Footer Bottom Bar ── */
