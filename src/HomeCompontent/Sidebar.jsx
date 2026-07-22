@@ -275,6 +275,16 @@ const Sidebar = ({ menuOpen, setMenuOpen }) => {
 
         {/* CTA buttons at bottom */}
         <div className={Style.HeaderRight}>
+          <a
+            href="https://flights.trippyjiffy.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={Style.PlanTripBtn}
+            onClick={handleClose}
+            style={{ background: "linear-gradient(135deg, #0ea5e9, #2563eb)" }}
+          >
+            ✈ Flights / Hotels
+          </a>
           <Link
             href="/enquiry-form"
             className={Style.PlanTripBtn}

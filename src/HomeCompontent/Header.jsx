@@ -214,6 +214,17 @@ const Header = () => {
                                 toggleDropdown={toggleDropdown}
                             />
 
+                            <a
+                                href="https://flights.trippyjiffy.com/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={Style.FlightsHotelsBtn}
+                                aria-label="Search Flights and Hotels"
+                            >
+                                <span className={Style.FlightsIcon} aria-hidden="true">✈</span>
+                                Flights / Hotels
+                            </a>
+
                             <div>
                                 <button
                                     className={Style.PlanTripBtn}
