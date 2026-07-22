@@ -196,12 +196,12 @@ const Header = () => {
                 <div className={Style.wrapper}>
                     <div className={Style.HeaderFlex}>
                         <div className={Style.HeaderLeft}>
-                            <Link href="/">
+                            <Link href="/" aria-label="TrippyJiffy Home">
                                 <img
-                                    src={logo.src}
+                                    src={logo?.src || logo || "/trippylogo.png"}
                                     alt="TrippyJiffy - Best Travel Agency, India Tours & Asia Travel"
-                                    width="160"
-                                    height="60"
+                                    width={140}
+                                    height={52}
                                     decoding="async"
                                 />
                             </Link>
