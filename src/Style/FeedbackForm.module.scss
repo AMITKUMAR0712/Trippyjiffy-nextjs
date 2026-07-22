@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-  font-family: var(--font-main, 'Georgia', serif);
+  font-family: var(--font-main, 'Inter', sans-serif);
   overflow: hidden;
 
   @media (max-width: 768px) {
@@ -201,7 +201,7 @@
     padding: 14px 16px;
     font-size: 15px;
     color: #fff;
-    font-family: var(--font-main, 'Georgia', serif);
+    font-family: var(--font-main, 'Inter', sans-serif);
     outline: none;
     transition: all 0.25s ease;
     width: 100%;
@@ -350,7 +350,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: var(--font-main, 'Georgia', serif);
+  font-family: var(--font-main, 'Inter', sans-serif);
   margin-top: 6px;
   min-height: 56px;
 
@@ -419,7 +419,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.25s ease;
-  font-family: var(--font-main, 'Georgia', serif);
+  font-family: var(--font-main, 'Inter', sans-serif);
   min-height: 50px;
 
   &:hover {

@@ -51,6 +51,7 @@ const DestinationCard = memo(({ item, slugify, type, handleAction }) => {
 });
 
 const ExploreTours = ({
+  skipClientSeo = false,
   seoTitle = "Best Family Tours in India | India Tour Sites & Travelling Packages",
   seoDesc = "Find the best family tours in India with TrippyJiffy. Explore top India tour sites, premium travelling packages in India, and exciting vacation packages for your loved ones.",
   seoKeywords = "family tours, india tour sites, travelling packages in india, vacation packages",
@@ -219,11 +220,13 @@ const ExploreTours = ({
     <div className={Style.ExploreContainer}>
       <div className={Style.wrapper}>
 
+        {!skipClientSeo && (
         <SEO
           title={seoTitle}
           description={seoDesc}
           keywords={seoKeywords}
         />
+        )}
 
         <div className={Style.header}>
           <h1 title={seoTitle}>{h1Text}<span>{h1SpanText}</span></h1>

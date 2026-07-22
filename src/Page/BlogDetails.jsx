@@ -11,13 +11,15 @@ import { renderBlocks } from "../utils/utils";
 // ⭐ Helmet Import
 import SEO from "../HomeCompontent/SEO";
 
-const BlogDetails = () => {
+const BlogDetails = ({ skipClientSeo = false, initialBlog = null }) => {
   const { id } = useParams();
-  const [blog, setBlog] = useState(null);
+  const [blog, setBlog] = useState(initialBlog);
 
   const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://trippyjiffy.com";
 
   useEffect(() => {
+    if (initialBlog) return;
+
     const fetchBlog = async () => {
       try {
         const res = await axios.get(`${baseURL}/api/blogs/get`);
@@ -31,7 +33,7 @@ const BlogDetails = () => {
     };
 
     fetchBlog();
-  }, [id, baseURL]);
+  }, [id, baseURL, initialBlog]);
 
   // ⭐ First paragraph for meta description
   const getFirstParagraph = (paragraphs) => {
@@ -68,32 +70,34 @@ const BlogDetails = () => {
 
   return (
     <>
-      <SEO
-        title={pageTitle}
-        description={pageDescription}
-        keywords="travel blog, travel guide, tourism, trippyjiffy blog"
-        ogImage={pageImage}
-        structuredData={blog ? {
-          "@context": "https://schema.org",
-          "@type": "BlogPosting",
-          "headline": blog.title,
-          "image": pageImage,
-          "datePublished": blog.date,
-          "author": {
-            "@type": "Organization",
-            "name": "TrippyJiffy"
-          },
-          "publisher": {
-            "@type": "Organization",
-            "name": "TrippyJiffy",
-            "logo": {
-              "@type": "ImageObject",
-              "url": "https://trippyjiffy.com/logo.png"
-            }
-          },
-          "description": pageDescription
-        } : null}
-      />
+      {!skipClientSeo && (
+        <SEO
+          title={pageTitle}
+          description={pageDescription}
+          keywords="travel blog, travel guide, tourism, trippyjiffy blog"
+          ogImage={pageImage}
+          structuredData={blog ? {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": blog.title,
+            "image": pageImage,
+            "datePublished": blog.date,
+            "author": {
+              "@type": "Organization",
+              "name": "TrippyJiffy"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "TrippyJiffy",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://trippyjiffy.com/logo.png"
+              }
+            },
+            "description": pageDescription
+          } : null}
+        />
+      )}
 
 
       <div className={Style.BlogDetails}>

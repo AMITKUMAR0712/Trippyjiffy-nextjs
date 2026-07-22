@@ -7,18 +7,19 @@ import BlogImg from "../Img/blog-hero.webp";
 import Loader from "../HomeCompontent/Loader.jsx";
 import axios from "axios";
 
-// ⭐ Helmet Import
-import { Helmet } from "react-helmet-async";
+// Helmet removed — metadata handled server-side in app/(site)/blogpage/page.js
 
-const BlogPage = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(true);
+const BlogPage = ({ initialBlogs }) => {
+  const [blogs, setBlogs] = useState(initialBlogs || []);
+  const [loading, setLoading] = useState(!initialBlogs?.length);
   const [currentPage, setCurrentPage] = useState(1);
   const blogsPerPage = 4;
 
   const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://trippyjiffy.com";
 
   useEffect(() => {
+    if (initialBlogs?.length) return;
+
     const fetchBlogs = async () => {
       try {
         setLoading(true);
@@ -32,7 +33,7 @@ const BlogPage = () => {
       }
     };
     fetchBlogs();
-  }, [baseURL]);
+  }, [baseURL, initialBlogs]);
 
   const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
@@ -67,32 +68,6 @@ const BlogPage = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Travel Blogs & India Tour Sites Guide | TrippyJiffy</title>
-
-        <meta
-          name="description"
-          content="Explore amazing travel stories, tips, India tour sites guides, and family vacation packages articles on the TrippyJiffy travel blog."
-        />
-
-        <meta
-          name="keywords"
-          content="travel blog, india tour sites, family tours, travelling packages in india, adventure blog, trippyjiffy blogs"
-        />
-
-        {/* ✅ CANONICAL URL */}
-        <link rel="canonical" href="https://trippyjiffy.com/blogs" />
-
-        <meta property="og:title" content="Travel Blogs | TrippyJiffy" />
-        <meta
-          property="og:description"
-          content="Explore travel stories, tips and guides for your next adventure."
-        />
-        <meta property="og:image" content={BlogImg.src} />
-        <meta property="og:type" content="website" />
-      </Helmet>
-
-
       <div className={Style.BlogPage}>
         <div className={Style.BlogPageTop}>
           <img src={BlogImg.src} alt="Travel Blog" />

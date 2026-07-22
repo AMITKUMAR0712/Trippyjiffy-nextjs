@@ -9,7 +9,7 @@
   min-height: 88vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  font-family: var(--font-main, 'Georgia', serif);
+  font-family: var(--font-main, 'Inter', sans-serif);
 
   /* Tablet: stack with slider on top */
   @media (max-width: 900px) {
@@ -172,7 +172,7 @@
   color: #fff;
   letter-spacing: 0.5px;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  font-family: var(--font-main, 'Georgia', serif);
+  font-family: var(--font-main, 'Inter', sans-serif);
 }
 
 .BrandTagline {
@@ -206,7 +206,7 @@
   font-size: 60px;
   line-height: 0.6;
   color: $primary;
-  font-family: Georgia, serif;
+  font-family: var(--font-main, 'Inter', sans-serif);
   margin-bottom: 8px;
 }
 
@@ -400,7 +400,7 @@
     background: #f8fafc;
     color: #1e293b;
     font-weight: 500;
-    font-family: var(--font-main, 'Georgia', serif);
+    font-family: var(--font-main, 'Inter', sans-serif);
     min-height: 50px;
 
     &::placeholder { color: #94a3b8; font-weight: 400; }
@@ -544,7 +544,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: var(--font-main, 'Georgia', serif);
+  font-family: var(--font-main, 'Inter', sans-serif);
   min-height: 56px;
 
   &:hover {

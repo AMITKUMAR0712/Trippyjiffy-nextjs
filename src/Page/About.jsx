@@ -11,18 +11,20 @@ import Certificates2 from "../Img/Certificates2.jpeg";
 
 import SEO from "../HomeCompontent/SEO";
 
-const About = () => {
+const About = ({ skipClientSeo = false }) => {
 
 
   return (
     <div className={Style.About}>
 
+      {!skipClientSeo && (
       <SEO
         title="About TrippyJiffy | Best Travel Agency for Family Tours & Vacation Packages"
         description="Learn more about TrippyJiffy. We specialize in custom family tours, travelling packages in India, and international vacation packages."
         keywords="about TrippyJiffy, family tours, travelling packages in india, vacation packages, travel agency India"
         canonical={typeof window !== "undefined" ? window.location.href : undefined}
       />
+      )}
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",

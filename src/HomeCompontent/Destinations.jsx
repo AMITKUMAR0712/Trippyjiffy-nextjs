@@ -231,6 +231,7 @@
 // export default Destinations;
 
 
+"use client";
 import React, { useEffect, useState, memo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -243,6 +244,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { getImgUrl } from "../utils/getImgUrl";
 import Loader from "../HomeCompontent/Loader.jsx";
+import OptimizedImage from "../components/OptimizedImage";
 import { ArrowUpRight, MapPin, Heart } from "lucide-react";
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://trippyjiffy.com";
@@ -292,7 +294,14 @@ const DestinationCard = memo(({ item, slugify, type }) => {
       className={Style.card}
       target={type === "upcoming" && item.link ? "_blank" : "_self"}
     >
-      <img src={imageUrl} alt={item.title} loading="lazy" decoding="async" className={Style.cardBgImg} />
+      <OptimizedImage
+        src={imageUrl}
+        alt={item.title}
+        width={700}
+        height={525}
+        className={Style.cardBgImg}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+      />
       <div className={Style.cardActions}>
         <button onClick={(e) => handleAction(e, "wishlist")} className={Style.iconBtn} title="Add to Wishlist">
           <Heart size={18} />
@@ -313,12 +322,12 @@ const DestinationCard = memo(({ item, slugify, type }) => {
   );
 });
 
-const Destinations = () => {
-  const [tours, setTours] = useState([]);
-  const [countries, setCountries] = useState([]);
-  const [indiaCategory, setIndiaCategory] = useState([]);
-  const [upcoming, setUpcoming] = useState([]);
-  const [loading, setLoading] = useState(true);
+const Destinations = ({ initialData }) => {
+  const [tours, setTours] = useState(initialData?.tours || []);
+  const [countries, setCountries] = useState(initialData?.countries || []);
+  const [indiaCategory, setIndiaCategory] = useState(initialData?.indiaCategory || []);
+  const [upcoming, setUpcoming] = useState(initialData?.upcoming || []);
+  const [loading, setLoading] = useState(!initialData);
 
   const getValidImageUrl = (img, image_url) => {
     return getImgUrl(image_url || img);
@@ -342,6 +351,8 @@ const Destinations = () => {
   };
 
   useEffect(() => {
+    if (initialData) return;
+
     const fetchData = async () => {
       try {
         const [stateRes, countryRes, upcomingRes, indiaCatRes] = await Promise.all([
@@ -418,7 +429,7 @@ const Destinations = () => {
     };
 
     fetchData();
-  }, []);
+  }, [initialData]);
 
   const slugify = (text) =>
     text

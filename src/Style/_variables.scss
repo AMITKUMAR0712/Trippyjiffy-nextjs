@@ -4,7 +4,7 @@ $primary-dark: #ea580c;
 $primary-light: rgba(249, 115, 22, 0.05);
 $secondary: var(--secondary-color, #fbbf24);
 $secondary-dark: #d97706;
-$font-family: var(--font-family, 'Georgia');
+$font-family: var(--font-main, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif);
 
 // Static UI Colors (Optional: also make these dynamic if needed)
 $text-dark: #1e293b;

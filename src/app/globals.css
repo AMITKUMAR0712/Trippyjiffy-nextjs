@@ -120,6 +120,18 @@ body {
   padding-bottom: var(--bottom-nav-h);
 }
 
+/* Force sans-serif sitewide — override legacy Georgia/Playfair fallbacks */
+html,
+body,
+button,
+input,
+textarea,
+select,
+h1, h2, h3, h4, h5, h6,
+p, a, span, li, label, td, th {
+  font-family: var(--font-main) !important;
+}
+
 a {
   text-decoration: none;
   color: inherit;

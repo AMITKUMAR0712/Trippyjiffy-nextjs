@@ -10,6 +10,7 @@ import { Search, MapPin, ArrowRight } from "lucide-react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-fade";
+import OptimizedImage from "../components/OptimizedImage";
 import Style from "../Style/Banner.module.scss";
 // The first banner image is moved to public and preloaded in index.html for LCP optimization
 const Banner1 = "/Banner_LCP.webp";
@@ -92,16 +93,27 @@ const Banner = () => {
         {[Banner1, Banner2.src, Banner3.src, Banner4.src].map((img, idx) => (
           <SwiperSlide key={idx}>
             <div className={Style.slide}>
-              <img
-                src={img}
-                alt={idx === 0 ? "Best family tours in India" : idx === 1 ? "India tour packages" : "Affordable travelling packages in India"}
-                className={Style.bannerImage}
-                loading={idx === 0 ? "eager" : "lazy"}
-                fetchPriority={idx === 0 ? "high" : "auto"}
-                decoding={idx === 0 ? "sync" : "async"}
-                width="1920"
-                height="1080"
-              />
+              {idx === 0 ? (
+                <OptimizedImage
+                  src={img}
+                  alt="Best family tours in India"
+                  className={Style.bannerImage}
+                  width={1920}
+                  height={1080}
+                  priority
+                  sizes="100vw"
+                />
+              ) : (
+                <img
+                  src={img}
+                  alt={idx === 1 ? "India tour packages" : "Affordable travelling packages in India"}
+                  className={Style.bannerImage}
+                  loading="lazy"
+                  decoding="async"
+                  width="1920"
+                  height="1080"
+                />
+              )}
               <div className={Style.overlay}></div>
             </div>
           </SwiperSlide>

@@ -20,7 +20,7 @@ const AdminTheme = () => {
   const [settings, setSettings] = useState({
     primaryColor: "#f97316",
     secondaryColor: "#fbbf24",
-    fontFamily: "Poppins",
+    fontFamily: "Inter",
     navbarColor: "#ffffff",
     footerColor: "#0f172a",
     glassEffect: false,
@@ -229,11 +229,10 @@ const AdminTheme = () => {
                 <div className={Style.inputGroup}>
                   <label>Select Font System</label>
                   <select name="fontFamily" value={settings.fontFamily} onChange={handleChange}>
-                    <option value="Poppins">Poppins (Travel-Friendly)</option>
                     <option value="Inter">Inter (Clean & Professional)</option>
+                    <option value="Poppins">Poppins (Travel-Friendly)</option>
                     <option value="Outfit">Outfit (High-End & Sharp)</option>
                     <option value="Montserrat">Montserrat (Bold Presence)</option>
-                    <option value="Playfair Display">Playfair (Elegant Luxury)</option>
                   </select>
                 </div>
                 <div style={{

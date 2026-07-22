@@ -1,105 +1,95 @@
 import "./globals.css";
 import Script from "next/script";
+import { JsonLd } from "@/components/JsonLd";
+import { travelAgencyJsonLd, localBusinessJsonLd } from "@/lib/seo";
+import { SITE_NAME } from "@/lib/site";
 
 export const metadata = {
   metadataBase: new URL("https://trippyjiffy.com"),
-  title: "Family Tours | India Tour Sites, Travelling Packages in India & Vacation Packages",
+  title: {
+    default:
+      "Best Family Tour Packages in India & Overseas | TrippyJiffy",
+    template: `%s | ${SITE_NAME}`,
+  },
   description:
-    "Book affordable India tours, family tours, and travelling packages in India. Explore domestic and international holiday destinations with customized packages.",
-  keywords:
-    "TrippyJiffy, India Tours, Family Tours, Travelling Packages in India, Vacation Packages, India Tour Sites",
-  authors: [{ name: "TrippyJiffy" }],
-  robots: "index, follow",
+    "Book customized family tours, India tour packages, overseas holidays, honeymoon trips, and group travel deals with TrippyJiffy. Expert itinerary planning and affordable vacation packages.",
+  keywords: [
+    "family tour packages",
+    "India tour packages",
+    "travelling packages in India",
+    "vacation packages",
+    "overseas tour packages",
+    "honeymoon packages",
+    "TrippyJiffy",
+  ],
+  authors: [{ name: SITE_NAME }],
+  robots: {
+    index: true,
+    follow: true,
+    "max-image-preview": "large",
+  },
   verification: {
     google: "Vl74CMXxnE8ovZb1mtkCyPSopPEEIrr72_cOlJ39xn0",
   },
   icons: {
     icon: "/trippylogo.png",
   },
+  alternates: {
+    canonical: "https://trippyjiffy.com/",
+  },
   openGraph: {
     type: "website",
     url: "https://trippyjiffy.com/",
-    title: "TrippyJiffy | Best Tour Packages",
+    title: "Best Family Tour Packages in India & Overseas | TrippyJiffy",
     description:
-      "Discover India & Asia with TrippyJiffy. Premium curated travel experiences for the modern traveler.",
-    images: ["https://trippyjiffy.com/og-banner.jpg"],
+      "Book customized family tours, India tour packages, overseas holidays, and group travel deals with TrippyJiffy.",
+    siteName: SITE_NAME,
+    images: [
+      {
+        url: "https://trippyjiffy.com/og-banner.jpg",
+        width: 1200,
+        height: 630,
+        alt: "TrippyJiffy Tour Packages",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "TrippyJiffy | Best Tour Packages",
+    title: "Best Family Tour Packages in India & Overseas | TrippyJiffy",
     description:
-      "Discover India & Asia with TrippyJiffy. Premium curated travel experiences for the modern traveler.",
+      "Book customized family tours, India tour packages, overseas holidays, and group travel deals with TrippyJiffy.",
     images: ["https://trippyjiffy.com/og-banner.jpg"],
   },
-};
-
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "TravelAgency",
-  name: "TrippyJiffy Travel",
-  url: "https://trippyjiffy.com/",
-  logo: "https://trippyjiffy.com/logo.png",
-  image: "https://trippyjiffy.com/banner.jpg",
-  description:
-    "Unlock India's 4th Dimension of Travel with TrippyJiffy. Premium curated travel experiences, customized itineraries, and professional tour management.",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "Sector 1, Vikas Nagar",
-    addressLocality: "Lucknow",
-    addressRegion: "Uttar Pradesh",
-    postalCode: "226022",
-    addressCountry: "IN",
+  other: {
+    "google-site-verification": "Vl74CMXxnE8ovZb1mtkCyPSopPEEIrr72_cOlJ39xn0",
   },
-  telephone: "+91-9870210896",
-  priceRange: "$$",
-  openingHours: "Mo-Su 09:00-21:00",
-  sameAs: [
-    "https://www.facebook.com/profile.php?id=61590639771522",
-    "https://www.instagram.com/trippy.jiffy",
-    "https://twitter.com/trippyjiffy",
-    "https://www.linkedin.com/company/trippyjiffy/",
-    "https://www.youtube.com/@trippyjiffy",
-  ],
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        {/* Performance Hints */}
+      <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://checkout.razorpay.com" />
-        <link rel="preconnect" href="https://api.razorpay.com" />
-        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-
-        {/* LCP Preload */}
-        <link rel="preload" as="image" href="/Banner_LCP.webp" fetchPriority="high" />
-
-        {/* Critical Fonts — sans-serif system (Inter, used for headings and body) */}
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
+        <link rel="preload" as="image" href="/Banner_LCP.webp" fetchPriority="high" />
+      </head>
+      <body>
+        <JsonLd data={[travelAgencyJsonLd, localBusinessJsonLd]} />
 
-        {/* Global Structured Data */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
-
-        {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-MHR3DXPV"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
-          ></iframe>
+            title="Google Tag Manager"
+          />
         </noscript>
 
-        {/* Fallback for Non-JS Crawlers / LLMs */}
         <noscript>
           <div style={{ padding: "20px" }}>
             <h1>TrippyJiffy | Best Tour Packages &amp; Holiday Deals</h1>
@@ -116,15 +106,11 @@ export default function RootLayout({ children }) {
             <p>
               Contact us at travelqueries@trippyjiffy.com or call +91-9870210896.
             </p>
-            <p>
-              Follow us on <a href="https://www.youtube.com/@trippyjiffy">YouTube</a>.
-            </p>
           </div>
         </noscript>
 
         {children}
 
-        {/* Analytics are loaded after hydration to protect Core Web Vitals */}
         <Script id="gtag-init" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
@@ -134,38 +120,37 @@ export default function RootLayout({ children }) {
         </Script>
         <Script id="gtm-loader" strategy="lazyOnload">
           {`
-            (function (w, d, s, l, i) {
-              w[l] = w[l] || [];
-              w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-              var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s),
-                dl = l != "dataLayer" ? "&l=" + l : "";
-              j.async = true;
-              j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-              f.parentNode.insertBefore(j, f);
-            })(window, document, "script", "dataLayer", "GTM-MHR3DXPV");
-          `}
-        </Script>
-        <Script
-          id="gtag-src"
-          strategy="lazyOnload"
-          src="https://www.googletagmanager.com/gtag/js?id=G-DGEZY5NBY0"
-        />
-        <Script id="gtag-config" strategy="lazyOnload">
-          {`
-            window.gtag && window.gtag("config", "G-DGEZY5NBY0");
-            window.gtag && window.gtag("config", "G-XSV86BKWEG");
-            window.gtag && window.gtag("config", "AW-17771713499");
-          `}
-        </Script>
-        <Script id="travelpayouts" strategy="lazyOnload">
-          {`
-            (function () {
-              var script = document.createElement("script");
-              script.async = 1;
-              script.src = 'https://emrldtp.com/NTQ4NjQ1.js?t=548645';
-              document.head.appendChild(script);
-            })();
+            function loadThirdPartyScripts() {
+              if (window.__tjScriptsLoaded) return;
+              window.__tjScriptsLoaded = true;
+              (function (w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+                var f = d.getElementsByTagName(s)[0],
+                  j = d.createElement(s),
+                  dl = l != "dataLayer" ? "&l=" + l : "";
+                j.async = true;
+                j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+                f.parentNode.insertBefore(j, f);
+              })(window, document, "script", "dataLayer", "GTM-MHR3DXPV");
+              var gtagScript = document.createElement("script");
+              gtagScript.async = true;
+              gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-DGEZY5NBY0";
+              document.head.appendChild(gtagScript);
+              gtagScript.onload = function () {
+                window.gtag && window.gtag("config", "G-DGEZY5NBY0");
+                window.gtag && window.gtag("config", "G-XSV86BKWEG");
+                window.gtag && window.gtag("config", "AW-17771713499");
+              };
+              var tpScript = document.createElement("script");
+              tpScript.async = true;
+              tpScript.src = "https://emrldtp.com/NTQ4NjQ1.js?t=548645";
+              document.head.appendChild(tpScript);
+            }
+            ["scroll", "click", "touchstart", "keydown"].forEach(function (evt) {
+              window.addEventListener(evt, loadThirdPartyScripts, { once: true, passive: true });
+            });
+            setTimeout(loadThirdPartyScripts, 8000);
           `}
         </Script>
       </body>

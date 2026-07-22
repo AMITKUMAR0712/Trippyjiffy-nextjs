@@ -23,14 +23,14 @@ import { Heart } from "lucide-react";
 import { toast } from "sonner";
 import PartnerStrip from "../HomeCompontent/PartnerStrip";
 
-const CountryTourDetails = () => {
+const CountryTourDetails = ({ skipClientSeo = false, initialTour = null, initialAsiaState = null }) => {
   const { asiastateId } = useParams();
   const searchParams = useSearchParams();
   const fromAsia = searchParams.get("from") === "asia";
 
-  const [tour, setTour] = useState(null);
-  const [image, setImage] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [tour, setTour] = useState(initialTour);
+  const [image, setImage] = useState(initialAsiaState);
+  const [loading, setLoading] = useState(!initialTour && !initialAsiaState);
   const [faqs, setFaqs] = useState([]);
   const [openFaq, setOpenFaq] = useState(null);
   const [relatedTours, setRelatedTours] = useState([]);
@@ -167,6 +167,13 @@ const CountryTourDetails = () => {
   };
 
   useEffect(() => {
+    if (initialTour || initialAsiaState) {
+      if (initialTour) setTour(initialTour);
+      if (initialAsiaState) setImage(initialAsiaState);
+      setLoading(false);
+      return;
+    }
+
     if (fromAsia) {
       setLoading(false);
       setTour(null);
@@ -224,7 +231,7 @@ const CountryTourDetails = () => {
       }
     };
     fetchTour();
-  }, [asiastateId, baseURL, fromAsia]);
+  }, [asiastateId, baseURL, fromAsia, initialTour, initialAsiaState]);
 
   useEffect(() => {
     if (!tour || fromAsia) return;
@@ -277,6 +284,7 @@ const CountryTourDetails = () => {
   return (
     <div className={Style.TourDetails}>
       {/* DYNAMIC SEO */}
+      {!skipClientSeo && (
       <Helmet>
         <title>
           {tour?.state_name
@@ -311,6 +319,7 @@ const CountryTourDetails = () => {
           href={typeof window !== "undefined" ? window.location.href : undefined}
         />
       </Helmet>
+      )}
 
 
       <div className={Style.TourImages}>

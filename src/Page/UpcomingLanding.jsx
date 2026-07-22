@@ -12,7 +12,7 @@ import Loader from "../HomeCompontent/Loader.jsx";
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
 
-const UpcomingLanding = () => {
+const UpcomingLanding = ({ skipClientSeo = false }) => {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -61,11 +61,13 @@ const UpcomingLanding = () => {
 
   return (
     <div className={Style.container}>
+      {!skipClientSeo && (
       <SEO
         title="Upcoming Trips 2026 | Group Departures & Travelling Packages in India"
         description="Join our upcoming group trips and travelling packages in India for 2026. Best group tour packages for domestic and international destinations. Book your slot with TrippyJiffy now!"
         keywords="upcoming trips 2026, group departures, travelling packages in india, family tours, weekend trips, TrippyJiffy"
       />
+      )}
 
       <div className={Style.hero}>
         <div

@@ -9,12 +9,12 @@ import { Helmet } from "react-helmet-async";
 import { getImgUrl } from "../utils/getImgUrl";
 import Loader from "../HomeCompontent/Loader.jsx";
 
-const CountryState = () => {
+const CountryState = ({ skipClientSeo = false, initialCountry = null }) => {
   const { countryId, stateName } = useParams(); // ✅ ADDED stateName
   const [showEnquiry, setShowEnquiry] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState(initialCountry);
   const [states, setStates] = useState([]);
   const [tours, setTours] = useState([]);
   const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://trippyjiffy.com";
@@ -133,6 +133,8 @@ const CountryState = () => {
 
   // Fetch Country
   useEffect(() => {
+    if (initialCountry) return;
+
     const fetchCountry = async () => {
       const countries = await fetchWithAlert(() =>
         axios.get(`${baseURL}/api/asia/get`)
@@ -146,7 +148,7 @@ const CountryState = () => {
       else setError("Country not found");
     };
     fetchCountry();
-  }, [countryId, baseURL]);
+  }, [countryId, baseURL, initialCountry]);
 
   // Fetch States
   useEffect(() => {
@@ -206,6 +208,7 @@ const CountryState = () => {
          ⭐ DYNAMIC HELMET UPDATED ⭐
          — Shows State Name if available
       **************************** */}
+      {!skipClientSeo && (
      <Helmet>
   <title>
     {selectedCountry
@@ -235,6 +238,7 @@ const CountryState = () => {
     href={typeof window !== "undefined" ? window.location.href : undefined}
   />
 </Helmet>
+      )}
 
 
       {/* ==================== TOP IMAGE ==================== */}

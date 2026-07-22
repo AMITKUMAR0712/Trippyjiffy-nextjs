@@ -3,11 +3,11 @@ import React from "react";
 import Style from "../Style/PrivacyPolicy.module.scss";
 import { Helmet } from "react-helmet-async";
 
-const PrivacyPolicy = () => {
+const PrivacyPolicy = ({ skipClientSeo = false }) => {
   return (
     <div className={Style.PrivacyPolicy}>
       <div className={Style.wrapper}>
-        {/* ⭐ DYNAMIC HELMET FOR SEO ⭐ */}
+        {!skipClientSeo && (
         <Helmet>
           <title>
             Privacy Policy – TrippyJiffy | Your Data, Our Responsibility
@@ -26,6 +26,7 @@ const PrivacyPolicy = () => {
             href="https://trippyjiffy.com/privacypolicy"
           />
         </Helmet>
+        )}
 
 
         <h1>TrippyJiffy Company Policies</h1>

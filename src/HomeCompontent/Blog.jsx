@@ -2,6 +2,7 @@
 import React, { useEffect, useState, memo, useCallback } from "react";
 import Style from "../Style/Blog.module.scss";
 import Link from "next/link";
+import OptimizedImage from "../components/OptimizedImage";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -27,14 +28,13 @@ const BlogCard = memo(({ item, getFirstParagraph }) => {
       <Link href={`/blog/${item.id}`} className={Style.imageWrap}>
         <picture>
           <source srcSet={fullImageURL} type="image/webp" />
-          <img
+          <OptimizedImage
             src={fullImageURL}
             alt={item?.title || "Blog image"}
             className={Style.BlogImage}
-            loading="lazy"
-            decoding="async"
-            width="600"
-            height="400"
+            width={600}
+            height={400}
+            sizes="(max-width: 768px) 100vw, 600px"
           />
         </picture>
       </Link>
@@ -64,11 +64,13 @@ const BlogCard = memo(({ item, getFirstParagraph }) => {
 // ======================
 // Main Blog Component
 // ======================
-const Blog = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(true);
+const Blog = ({ initialBlogs }) => {
+  const [blogs, setBlogs] = useState(initialBlogs || []);
+  const [loading, setLoading] = useState(!initialBlogs?.length);
 
   useEffect(() => {
+    if (initialBlogs?.length) return;
+
     const fetchBlogs = async () => {
       try {
         const res = await axios.get(`${baseURL}/api/blogs/get`);
@@ -84,7 +86,7 @@ const Blog = () => {
       }
     };
     fetchBlogs();
-  }, []);
+  }, [initialBlogs]);
 
   const getFirstParagraph = useCallback((paragraphs) => {
     try {

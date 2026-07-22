@@ -3,16 +3,17 @@ import React, { useEffect, useState, useRef, memo, useCallback } from "react";
 import Style from "../Style/Testimonials.module.scss";
 import axios from "axios";
 import GoogleReviews from "../HomeCompontent/GoogleReviews.jsx";
+import OptimizedImage from "../components/OptimizedImage";
 import { createPortal } from "react-dom";
 
-// Full-resolution images for the background slider
+// Optimized thumbnails for testimonial hex cards
 const travelImages = [
-  "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1200&q=60",
-  "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1200&q=60",
-  "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=60",
-  "https://images.unsplash.com/photo-1454372182658-c712e4c5a1db?auto=format&fit=crop&w=1200&q=60",
-  "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=1200&q=60",
-  "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=1200&q=60",
+  "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=400&q=50",
+  "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=50",
+  "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=400&q=50",
+  "https://images.unsplash.com/photo-1454372182658-c712e4c5a1db?auto=format&fit=crop&w=400&q=50",
+  "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=400&q=50",
+  "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=400&q=50",
   "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1200&q=60",
   "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=1200&q=60",
   "https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=1200&q=60",
@@ -76,7 +77,7 @@ const FeedbackModal = ({ item, imgSrc, onClose }) => {
 
         {/* Top hero image */}
         <div className={Style.modalHero}>
-          <img src={imgSrc} alt={item.title} />
+          <OptimizedImage src={imgSrc} alt={item.title} width={400} height={300} sizes="400px" />
           <div className={Style.modalHeroOverlay} />
           {/* Name + location badge */}
           <div className={Style.modalHeroBadge}>
@@ -174,7 +175,7 @@ const HexFeedbackCard = memo(({ item, imgIndex, onOpen }) => {
       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onOpen(item, imageSrc); }}
     >
       <div className={Style.hexShape}>
-        <img src={imageSrc} alt={item.title} loading="lazy" decoding="async" width="400" height="400" />
+        <OptimizedImage src={imageSrc} alt={item.title} width={400} height={400} sizes="228px" />
         <div className={Style.hexCaption}>
           <h3>{item.title}</h3>
           <p>{item.subtitle}</p>

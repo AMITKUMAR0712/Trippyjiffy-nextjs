@@ -51,11 +51,11 @@ const defaultContact = {
   address: "TrippyJiffy, New Delhi, India"
 };
 
-const LandingTourPage = () => {
+const LandingTourPage = ({ skipClientSeo = false, initialPage = null }) => {
 
 
   const { slug } = useParams();
-  const [page, setPage] = useState(null);
+  const [page, setPage] = useState(initialPage);
   const [activeCert, setActiveCert] = useState(null);
   const [recommended, setRecommended] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -571,12 +571,14 @@ const LandingTourPage = () => {
         "--accent": page.theme?.accent,
       }}
     >
+      {!skipClientSeo && (
       <SEO
         title={page.seo?.title || page.title}
         description={page.seo?.description || page.hero?.subtitle}
         keywords={page.seo?.keywords || "travel, tours, trippyjiffy"}
         ogImage={formatImageURL(page.hero?.slides?.[0])}
       />
+      )}
 
       {/* NEW AUTO LEAD POPUP */}
       <AutoLeadPopup delay={4000} context={`Landing Page: ${page.title}`} />

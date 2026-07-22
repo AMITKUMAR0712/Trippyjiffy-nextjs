@@ -8,7 +8,7 @@ import Style from "../Style/CustomizeTrip.module.scss";
 import Banner from "../Img/Banner3.jpg";
 import { apiPath } from "../utils/apiBase";
 
-const CustomizeTrip = () => {
+const CustomizeTrip = ({ skipClientSeo = false }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -50,10 +50,12 @@ const CustomizeTrip = () => {
 
   return (
     <div className={Style.pageWrapper}>
+      {!skipClientSeo && (
       <SEO
         title="Customize Your Dream Holiday | TrippyJiffy"
         description="Get a tailor-made holiday plan curated by our experts. Tell us your preferences and we'll design the perfect itinerary for you."
       />
+      )}
 
       <div className={Style.heroSection}>
         <div className={Style.overlay}></div>

@@ -5,7 +5,7 @@ import BusinessImage from "../Img/BusinessDisk 1.jpg";
 import { Helmet } from "react-helmet-async";
 import { toast } from "sonner";
 
-const Business = () => {
+const Business = ({ skipClientSeo = false }) => {
 
 
   const [formData, setFormData] = useState({
@@ -72,7 +72,7 @@ const Business = () => {
 
   return (
     <div className={Style.Business}>
-      {/* ⭐ Helmet for Dynamic Title & SEO */}
+      {!skipClientSeo && (
       <Helmet>
         <title>Business With Us | TrippyJiffy</title>
 
@@ -89,6 +89,7 @@ const Business = () => {
         {/* ✅ CANONICAL URL */}
         <link rel="canonical" href="https://trippyjiffy.com/business-with-us" />
       </Helmet>
+      )}
 
 
       {/* Banner */}

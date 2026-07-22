@@ -11,19 +11,25 @@ import { getImgUrl } from "../utils/getImgUrl";
 import Loader from "../HomeCompontent/Loader.jsx";
 import SEO from "../HomeCompontent/SEO";
 
-const State = () => {
+const State = ({ skipClientSeo = false, initialState = null }) => {
   const { stateId, stateName } = useParams();
 
   const [showEnquiry, setShowEnquiry] = useState(false);
   const [statesList, setStatesList] = useState([]);
-  const [stateData, setStateData] = useState(null);
+  const [stateData, setStateData] = useState(initialState);
   const [tourData, setTourData] = useState([]);
   const [categoryIndia, setCategoryIndia] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialState);
 
   const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://trippyjiffy.com";
 
   useEffect(() => {
+    if (initialState) {
+      setStatesList([initialState]);
+      setLoading(false);
+      return;
+    }
+
     const fetchData = async () => {
       try {
         const stateRes = await axios.get(`${baseURL}/api/state/get`);
@@ -59,7 +65,7 @@ const State = () => {
     };
 
     fetchData();
-  }, [stateId, stateName, baseURL]);
+  }, [stateId, stateName, baseURL, initialState]);
 
   const slugify = (s = "") =>
     String(s).toLowerCase().trim().replace(/\s+/g, "-");
@@ -338,12 +344,14 @@ const State = () => {
 
   return (
     <>
+      {!skipClientSeo && (
       <SEO
         title={`${bannerTitle} Tours | Best ${bannerTitle} Packages & Travel Guide`}
         isDestination={true}
         description={`Book your ${bannerTitle} tour package with TrippyJiffy. Explore the best ${bannerTitle} trip cost, itineraries, and customized vacation packages for an unforgettable journey.`}
         keywords={`${bannerTitle} tour package, ${bannerTitle} trip cost, ${bannerTitle} itinerary, explore ${bannerTitle}, vacation packages, TrippyJiffy`}
       />
+      )}
 
 
       <div className={`${Style.StatePage} ${showEnquiry ? Style.blurred : ""}`}>

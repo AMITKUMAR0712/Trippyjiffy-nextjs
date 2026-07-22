@@ -16,10 +16,10 @@ import { Heart } from "lucide-react";
 import { toast } from "sonner";
 import { renderBlocks } from "../utils/utils";
 
-const UpcomingDetails = () => {
+const UpcomingDetails = ({ skipClientSeo = false, initialTrip = null }) => {
   const { id } = useParams();
-  const [trip, setTrip] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [trip, setTrip] = useState(initialTrip);
+  const [loading, setLoading] = useState(!initialTrip);
   const [showMobileForm, setShowMobileForm] = useState(false);
   const [expandedDays, setExpandedDays] = useState([0]);
   const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://trippyjiffy.com";
@@ -135,6 +135,8 @@ const UpcomingDetails = () => {
   };
 
   useEffect(() => {
+    if (initialTrip) return;
+
     const fetchTrip = async () => {
       try {
         const res = await axios.get(`${baseURL}/api/upcoming-trips/get/${id}`);
@@ -147,7 +149,7 @@ const UpcomingDetails = () => {
     };
     fetchTrip();
     window.scrollTo(0, 0);
-  }, [id, baseURL]);
+  }, [id, baseURL, initialTrip]);
 
   if (loading) return <div className={Style.loader}>...</div>;
   if (!trip) return <div className={Style.error}>Trip not found</div>;
@@ -159,9 +161,11 @@ const UpcomingDetails = () => {
 
   return (
     <div className={Style.container}>
+      {!skipClientSeo && (
       <Helmet>
         <title>{trip.title} | TrippyJiffy</title>
       </Helmet>
+      )}
 
       {/* Hero */}
       <section className={Style.hero}>

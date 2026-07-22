@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: center;
   padding: 50px 20px;
-  font-family: var(--font-main, 'Georgia', serif);
+  font-family: var(--font-main, 'Inter', sans-serif);
   overflow-x: hidden;
   overflow-y: auto;
   background-size: cover;
@@ -493,7 +493,7 @@
     padding: 12px 14px;
     font-size: 14px;
     color: #fff;
-    font-family: var(--font-main, 'Georgia', serif);
+    font-family: var(--font-main, 'Inter', sans-serif);
     outline: none;
     width: 100% !important;
     max-width: 100%;
@@ -533,7 +533,7 @@
     padding: 12px 36px 12px 14px;
     font-size: 14px;
     color: #fff;
-    font-family: var(--font-main, 'Georgia', serif);
+    font-family: var(--font-main, 'Inter', sans-serif);
     outline: none;
     width: 100% !important;
     max-width: 100%;
@@ -668,7 +668,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: var(--font-main, 'Georgia', serif);
+  font-family: var(--font-main, 'Inter', sans-serif);
   margin-top: 4px;
   min-height: 54px;
 

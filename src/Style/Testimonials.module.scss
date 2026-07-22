@@ -6,7 +6,7 @@
   background: #0f1e35;
   text-align: center;
   overflow: hidden;
-  font-family: var(--font-main, 'Georgia', serif);
+  font-family: var(--font-main, 'Inter', sans-serif);
 
   --hex-width: 140px;
   --hex-gap: 8px;
@@ -182,7 +182,7 @@
     transition: opacity 0.4s ease;
 
     h3 {
-      font-family: var(--font-heading, "Playfair Display", serif);
+      font-family: var(--font-heading, 'Inter', sans-serif);
       color: #fff;
       font-size: 1rem;
       font-weight: 600;
@@ -271,7 +271,7 @@
     padding: 14px 32px;
     background: linear-gradient(135deg, $primary, $primary-dark);
     color: #fff;
-    font-family: var(--font-main, 'Georgia', serif);
+    font-family: var(--font-main, 'Inter', sans-serif);
     font-size: 14px;
     font-weight: 700;
     border: none;
@@ -420,7 +420,7 @@
 }
 
 .modalName {
-  font-family: var(--font-heading, "Playfair Display", serif);
+  font-family: var(--font-heading, 'Inter', sans-serif);
   font-size: 18px;
   font-weight: 700;
   color: #fff;
@@ -497,7 +497,7 @@
 }
 
 .quoteIcon {
-  font-family: Georgia, serif;
+  font-family: var(--font-main, 'Inter', sans-serif);
   font-size: 60px;
   line-height: 0.6;
   color: $primary;
@@ -509,7 +509,7 @@
 }
 
 .quoteIconClose {
-  font-family: Georgia, serif;
+  font-family: var(--font-main, 'Inter', sans-serif);
   font-size: 60px;
   line-height: 0.6;
   color: $primary;

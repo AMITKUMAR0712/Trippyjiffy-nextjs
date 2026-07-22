@@ -54,9 +54,8 @@ const AppShell = ({ children }) => {
     root.style.setProperty("--footer-color", settings.footerColor);
     root.style.setProperty("--card-radius", `${settings.borderRadius}px` || "20px");
 
-    // Font family is fixed to the site's classic serif system (Playfair Display
-    // headings + Georgia body) and intentionally does not follow the admin
-    // theme picker's dynamic font setting here.
+    // Font family is fixed to Inter (sans-serif) sitewide and intentionally
+    // does not follow the admin theme picker's dynamic font setting here.
 
     // Handle dark theme body class
     if (settings.darkTheme) {

@@ -23,10 +23,10 @@ import PartnerStrip from "../HomeCompontent/PartnerStrip";
 // ----------------- SEO -----------------
 import SEO from "../HomeCompontent/SEO";
 
-const TourDetails = () => {
+const TourDetails = ({ skipClientSeo = false, initialTour = null }) => {
   const { tourId } = useParams();
-  const [tour, setTour] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [tour, setTour] = useState(initialTour);
+  const [loading, setLoading] = useState(!initialTour);
   const [faqs, setFaqs] = useState([]);
   const [openFaq, setOpenFaq] = useState(null);
   const [states, setStates] = useState([]);
@@ -102,6 +102,8 @@ const TourDetails = () => {
 
   // 🟢 Fetch Tour
   useEffect(() => {
+    if (initialTour) return;
+
     const fetchTourData = async () => {
       try {
         setLoading(true);
@@ -116,7 +118,7 @@ const TourDetails = () => {
       }
     };
     fetchTourData();
-  }, [tourId, baseURL]);
+  }, [tourId, baseURL, initialTour]);
 
   // 🟢 Fetch FAQs
   useEffect(() => {
@@ -270,6 +272,7 @@ const TourDetails = () => {
 
   return (
     <div className={Style.TourDetails}>
+      {!skipClientSeo && (
       <SEO
         title={tour.tour_name ? `${tour.tour_name} Tour Package | Best Itinerary & Deals` : `${tourState?.state_name} Tour Packages`}
         isDestination={true}
@@ -308,6 +311,7 @@ const TourDetails = () => {
           }
         }}
       />
+      )}
 
       {/* 🖼 Header Image */}
       <div className={Style.TourImages}>
